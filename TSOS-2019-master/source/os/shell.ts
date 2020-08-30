@@ -31,6 +31,12 @@ module TSOS {
                                   "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
 
+            // date
+            sc = new ShellCommand(this.shellDateTime,
+                "date",
+                "- Displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
+
             // help
             sc = new ShellCommand(this.shellHelp,
                                   "help",
@@ -204,7 +210,17 @@ module TSOS {
         // actual parameter list when this function is called, so I feel like we need it.
 
         public shellVer(args: string[]) {
-            _StdOut.putText("DIBSOS version " + APP_VERSION);
+            _StdOut.putText("DIBSOS version " + "0.1");
+        }
+
+        public shellDateTime(args: string[]){
+            let date = new Date();
+            _StdOut.putText(date);
+        }
+
+        public shellWhereAmI(args: string[]){
+            _StdOut.putText("lost");
+
         }
 
         public shellHelp(args: string[]) {
@@ -235,23 +251,33 @@ module TSOS {
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
                     case "ver":
-                        _StdOut.putText("Ver displays the current version of the OS");
+                        _StdOut.putText("Ver displays the current version of the OS.");
                         break;
                     case "shutdown":
-                        _StdOut.putText("Shuts down the virtual OS but continues operating on the lower level");
+                        _StdOut.putText("Shuts down the virtual OS but continues operating on the lower level.");
                         break;
                     case "cls":
-                        _StdOut.putText("Clears screen");
+                        _StdOut.putText("Clears screen.");
                         break;
                     case "trace":
-                        _StdOut.putText("Trace on/off starts and stops the host log from logging system calls");
+                        _StdOut.putText("Trace on/off starts and stops the host log from logging system calls.");
                         break;
                     case "rot13":
                         _StdOut.putText("Performs rot13 operation on given string argument and encrypts string.");
                         break;
                     case "prompt":
-                        _StdOut.putText("Changes prompt symbol to specified argument given by user");
-                        break; 
+                        _StdOut.putText("Changes prompt symbol to specified argument given by user.");
+                        break;
+                    case "date":
+                        _StdOut.putText("Displays the date and time.");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("Displays where you are. Kinda.");
+                        break;
+                    //TODO: add personal command
+                    case "tobecontinued":
+                        _StdOut.putText("welp");
+                        break;   
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
