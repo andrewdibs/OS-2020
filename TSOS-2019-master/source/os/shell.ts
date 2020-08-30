@@ -43,6 +43,12 @@ module TSOS {
                                   "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
 
+            // whereami
+            sc = new ShellCommand(this.shellWhereAmI,
+                "whereami",
+                "- Lets you know where you are.");
+            this.commandList[this.commandList.length] = sc;
+
             // shutdown
             sc = new ShellCommand(this.shellShutdown,
                                   "shutdown",
@@ -79,9 +85,14 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            // fortune
+            sc = new ShellCommand(this.shellFortune,
+                                  "fortune",
+                                  "- Tells you a fortune.")
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
-
+            
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -223,6 +234,11 @@ module TSOS {
 
         }
 
+        public shellFortune(args: string[]){
+            _StdOut.putText("you are not illiterate.. :)");
+
+        }
+
         public shellHelp(args: string[]) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -275,8 +291,8 @@ module TSOS {
                         _StdOut.putText("Displays where you are. Kinda.");
                         break;
                     //TODO: add personal command
-                    case "tobecontinued":
-                        _StdOut.putText("welp");
+                    case "fortune":
+                        _StdOut.putText("hmmmmm..");
                         break;   
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

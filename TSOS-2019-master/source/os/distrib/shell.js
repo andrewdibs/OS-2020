@@ -30,6 +30,9 @@ var TSOS;
             // help
             sc = new ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
+            // whereami
+            sc = new ShellCommand(this.shellWhereAmI, "whereami", "- Lets you know where you are.");
+            this.commandList[this.commandList.length] = sc;
             // shutdown
             sc = new ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
@@ -47,6 +50,9 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             // prompt <string>
             sc = new ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+            this.commandList[this.commandList.length] = sc;
+            // fortune
+            sc = new ShellCommand(this.shellFortune, "fortune", "- Tells you a fortune.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -179,6 +185,9 @@ var TSOS;
         Shell.prototype.shellWhereAmI = function (args) {
             _StdOut.putText("lost");
         };
+        Shell.prototype.shellFortune = function (args) {
+            _StdOut.putText("you are not illiterate.. :)");
+        };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -228,8 +237,8 @@ var TSOS;
                         _StdOut.putText("Displays where you are. Kinda.");
                         break;
                     //TODO: add personal command
-                    case "tobecontinued":
-                        _StdOut.putText("welp");
+                    case "fortune":
+                        _StdOut.putText("hmmmmm..");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
