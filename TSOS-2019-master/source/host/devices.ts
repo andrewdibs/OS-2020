@@ -31,6 +31,15 @@ module TSOS {
             _OSclock++;
             // Call the kernel clock pulse event handler.
             _Kernel.krnOnCPUClockPulse();
+
+            // get date and time for task bar
+            let date = new Date();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let year = date.getFullYear();
+            let time = (date.getHours() % 12 || 12) + ":" + (date.getMinutes() < 10 ?"0":"") + date.getMinutes();
+            document.getElementById("date").innerHTML = month + "/" + day + "/" + year; 
+            document.getElementById("time").innerHTML = time;
         }
 
         //

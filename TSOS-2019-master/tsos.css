@@ -46,3 +46,19 @@ h3 {
   font-size: 8pt;
   text-align: center;
 }
+
+#divTaskBar{
+  position: fixed;
+  border: 1px solid black;
+  left: 0%;
+  bottom: 0%;
+  font-size: x-large;
+  color: white;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 5px;
+  padding-bottom: 45px;
+  height: 30px;
+  width: 100%;
+  background-color:rgb(79, 80, 78);
+}

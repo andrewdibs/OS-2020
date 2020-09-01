@@ -28,6 +28,14 @@ var TSOS;
             _OSclock++;
             // Call the kernel clock pulse event handler.
             _Kernel.krnOnCPUClockPulse();
+            // get date and time for task bar
+            var date = new Date();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var time = (date.getHours() % 12 || 12) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
+            document.getElementById("date").innerHTML = month + "/" + day + "/" + year;
+            document.getElementById("time").innerHTML = time;
         };
         //
         // Keyboard Interrupt, a HARDWARE Interrupt Request. (See pages 560-561 in our text book.)

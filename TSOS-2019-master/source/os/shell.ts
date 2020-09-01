@@ -301,6 +301,7 @@ module TSOS {
                 _StdOut.putText("Usage: man <topic>  Please supply a topic.");
             }
         }
+        
 
         public shellTrace(args: string[]) {
             if (args.length > 0) {
