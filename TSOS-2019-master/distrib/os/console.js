@@ -7,17 +7,21 @@
 var TSOS;
 (function (TSOS) {
     var Console = /** @class */ (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, bufferHistory, historyIndex) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
+            if (bufferHistory === void 0) { bufferHistory = []; }
+            if (historyIndex === void 0) { historyIndex = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.bufferHistory = bufferHistory;
+            this.historyIndex = historyIndex;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -39,6 +43,8 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.bufferHistory.push(this.buffer);
+                    this.historyIndex++;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -51,9 +57,22 @@ var TSOS;
                 else if (chr === "Ctrl-c") { // terminate program
                 }
                 else if (chr === "upArrow") { // previous command
-                    this.deleteCommand();
+                    if (this.historyIndex != 0) {
+                        this.deleteCommand();
+                        this.historyIndex--;
+                        // change current command
+                        this.putText(this.bufferHistory[this.historyIndex]);
+                        this.buffer = (this.bufferHistory[this.historyIndex]);
+                    }
                 }
                 else if (chr === "downArrow") { // next command
+                    if (this.historyIndex < this.bufferHistory.length - 1) {
+                        this.deleteCommand();
+                        this.historyIndex++;
+                        // change command
+                        this.putText(this.bufferHistory[this.historyIndex]);
+                        this.buffer = this.bufferHistory[this.historyIndex];
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...

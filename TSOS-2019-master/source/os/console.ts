@@ -13,7 +13,10 @@ module TSOS {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
-                    public buffer = "") {
+                    public buffer = "",
+                    public bufferHistory = [],
+                    public historyIndex = 0) {
+                    
         }
 
         public init(): void {
@@ -39,6 +42,8 @@ module TSOS {
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.bufferHistory.push(this.buffer);
+                    this.historyIndex++;
                     // ... and reset our buffer.
                     this.buffer = "";
                 } 
@@ -53,11 +58,23 @@ module TSOS {
                     
                 }
                 else if(chr === "upArrow"){ // previous command
-                    this.deleteCommand();
+                    if (this.historyIndex != 0){
+                        this.deleteCommand();
+                        this.historyIndex--;
 
+                        // change current command
+                        this.putText(this.bufferHistory[this.historyIndex]);
+                        this.buffer = (this.bufferHistory[this.historyIndex]);
+                    }
                 }
                 else if(chr === "downArrow"){ // next command
-
+                    if (this.historyIndex < this.bufferHistory.length - 1){
+                        this.deleteCommand();
+                        this.historyIndex++; 
+                        // change command
+                        this.putText(this.bufferHistory[this.historyIndex]);
+                        this.buffer = this.bufferHistory[this.historyIndex]; 
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...

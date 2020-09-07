@@ -212,9 +212,9 @@ var TSOS;
             var program = _ProgramInputBox.value;
             // remove white space
             program = program.toUpperCase().replace(/\s/g, "");
-            _StdOut.putText(program);
+            // validate only hex Symbols
             var regex = /^[0-9A-Fa-f]+$/;
-            if (regex.test(program)) {
+            if (regex.test(program)) { // load program
                 _StdOut.putText("Program Valid. Command run <id> to execute.");
             }
             else {
