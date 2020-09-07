@@ -53,6 +53,7 @@ module TSOS {
                     
                 }
                 else if(chr === "upArrow"){ // previous command
+                    this.deleteCommand();
 
                 }
                 else if(chr === "downArrow"){ // next command
@@ -65,7 +66,7 @@ module TSOS {
                     // ... and add it to our buffer.
                     this.buffer += chr;
                 }
-                // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
+                
             }
         }
         public backspace(): void{
@@ -76,9 +77,14 @@ module TSOS {
             this.currentXPosition = this.currentXPosition - deltaX;
             // remove drawing from console canvas 
             _DrawingContext.deleteText(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition,str);
-            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize - _FontHeightMargin, deltaX,_DefaultFontSize +_FontHeightMargin);
+            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize - _FontHeightMargin, deltaX,_DefaultFontSize +_FontHeightMargin *2);
             // remove from buffer
             this.buffer = this.buffer.slice(0,-1);
+        }
+        public deleteCommand(): void{
+            while(this.buffer.length > 0){
+                this.backspace();
+            }
         }
 
         public putText(text): void {

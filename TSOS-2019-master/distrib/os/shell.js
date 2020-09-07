@@ -54,6 +54,9 @@ var TSOS;
             // fortune
             sc = new TSOS.ShellCommand(this.shellFortune, "fortune", "- Tells you a fortune.");
             this.commandList[this.commandList.length] = sc;
+            // load
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads the program in Program input.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             // Display the initial prompt.
@@ -176,7 +179,7 @@ var TSOS;
         // Although args is unused in some of these functions, it is always provided in the 
         // actual parameter list when this function is called, so I feel like we need it.
         Shell.prototype.shellVer = function (args) {
-            _StdOut.putText("DIBSOS version " + "0.1");
+            _StdOut.putText("dibsOS version " + "0.1");
         };
         Shell.prototype.shellDateTime = function (args) {
             var date = new Date();
@@ -204,6 +207,19 @@ var TSOS;
         Shell.prototype.shellCls = function (args) {
             _StdOut.clearScreen();
             _StdOut.resetXY();
+        };
+        Shell.prototype.shellLoad = function (args) {
+            var program = _ProgramInputBox.value;
+            // remove white space
+            program = program.toUpperCase().replace(/\s/g, "");
+            _StdOut.putText(program);
+            var regex = /^[0-9A-Fa-f]+$/;
+            if (regex.test(program)) {
+                _StdOut.putText("Program Valid. Command run <id> to execute.");
+            }
+            else {
+                _StdOut.putText("Invalid hex Program..");
+            }
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
@@ -236,9 +252,11 @@ var TSOS;
                     case "whereami":
                         _StdOut.putText("Displays where you are. Kinda.");
                         break;
-                    //TODO: add personal command
                     case "fortune":
                         _StdOut.putText("hmmmmm..");
+                        break;
+                    case "load":
+                        _StdOut.putText("Loads the program given by the user from program input");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

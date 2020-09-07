@@ -36,6 +36,7 @@ var TSOS;
             var time = (date.getHours() % 12 || 12) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
             document.getElementById("date").innerHTML = month + "/" + day + "/" + year;
             document.getElementById("time").innerHTML = time;
+            document.getElementById("smile").innerHTML = " : )";
         };
         //
         // Keyboard Interrupt, a HARDWARE Interrupt Request. (See pages 560-561 in our text book.)

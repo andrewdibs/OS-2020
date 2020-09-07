@@ -33,8 +33,8 @@ module TSOS {
 
             // date
             sc = new ShellCommand(this.shellDateTime,
-                "date",
-                "- Displays the current date and time.");
+                                  "date",
+                                  "- Displays the current date and time.");
             this.commandList[this.commandList.length] = sc;
 
             // help
@@ -45,8 +45,8 @@ module TSOS {
 
             // whereami
             sc = new ShellCommand(this.shellWhereAmI,
-                "whereami",
-                "- Lets you know where you are.");
+                                  "whereami",
+                                  "- Lets you know where you are.");
             this.commandList[this.commandList.length] = sc;
 
             // shutdown
@@ -89,6 +89,12 @@ module TSOS {
             sc = new ShellCommand(this.shellFortune,
                                   "fortune",
                                   "- Tells you a fortune.")
+            this.commandList[this.commandList.length] = sc;
+            
+            // load
+            sc = new ShellCommand(this.shellLoad,
+                                  "load",
+                                  "- Loads the program in Program input.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -221,7 +227,7 @@ module TSOS {
         // actual parameter list when this function is called, so I feel like we need it.
 
         public shellVer(args: string[]) {
-            _StdOut.putText("DIBSOS version " + "0.1");
+            _StdOut.putText("dibsOS version " + "0.1");
         }
 
         public shellDateTime(args: string[]){
@@ -259,6 +265,20 @@ module TSOS {
             _StdOut.resetXY();
         }
 
+        public shellLoad(args: string[]){
+            let program = _ProgramInputBox.value;
+            // remove white space
+            program = program.toUpperCase().replace(/\s/g,"");
+            // validate only hex Symbols
+            let regex = /^[0-9A-Fa-f]+$/;
+            if (regex.test(program)){ // load program
+                _StdOut.putText("Program Valid. Command run <id> to execute.")
+            }else{
+                _StdOut.putText("Invalid hex Program..");
+            }
+
+        }
+
         public shellMan(args: string[]) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -290,10 +310,12 @@ module TSOS {
                     case "whereami":
                         _StdOut.putText("Displays where you are. Kinda.");
                         break;
-                    //TODO: add personal command
                     case "fortune":
                         _StdOut.putText("hmmmmm..");
-                        break;   
+                        break; 
+                    case "load":
+                        _StdOut.putText("Loads the program given by the user from program input");
+                        break;  
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
