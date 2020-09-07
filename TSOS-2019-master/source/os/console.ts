@@ -41,7 +41,24 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else {
+                } 
+                else if (chr == String.fromCharCode(8)){
+                    // backspace deletes a character and changes x y coordinates of cursor
+                    this.backspace();
+                }
+                else if(chr == String.fromCharCode(9)){ // tab completion
+
+                }
+                else if(chr === "Ctrl-c"){ // terminate program
+                    
+                }
+                else if(chr === "upArrow"){ // previous command
+
+                }
+                else if(chr === "downArrow"){ // next command
+
+                }
+                else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -50,6 +67,18 @@ module TSOS {
                 }
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
             }
+        }
+        public backspace(): void{
+            // get char to be removed
+            let str = this.buffer.charAt(this.buffer.length - 1);
+            // find change in x coordinates
+            var deltaX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, str)
+            this.currentXPosition = this.currentXPosition - deltaX;
+            // remove drawing from console canvas 
+            _DrawingContext.deleteText(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition,str);
+            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize - _FontHeightMargin, deltaX,_DefaultFontSize +_FontHeightMargin);
+            // remove from buffer
+            this.buffer = this.buffer.slice(0,-1);
         }
 
         public putText(text): void {
@@ -76,11 +105,23 @@ module TSOS {
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            this.currentYPosition += _DefaultFontSize + 
+            let lineHieght = _DefaultFontSize + 
                                      _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                      _FontHeightMargin;
+            this.currentYPosition += lineHieght;
 
-            // TODO: Handle scrolling. (iProject 1)
+            if(this.currentYPosition > _Canvas.height){
+                // store canvas image
+                let screenShot = _DrawingContext.getImageData(0,0, _Canvas.width,this.currentYPosition + _FontHeightMargin);
+                let deltaY = this.currentYPosition - _Canvas.height + _FontHeightMargin;
+                // clear screen
+                this.clearScreen();
+                // scroll up 
+                _DrawingContext.putImageData(screenShot, 0, -deltaY);
+                this.currentXPosition = 0;
+                this.currentYPosition -= deltaY;
+            }
+            
         }
     }
  }

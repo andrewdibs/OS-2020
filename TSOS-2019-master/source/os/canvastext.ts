@@ -186,8 +186,12 @@ module TSOS {
             ctx.restore();
             return total;
         }
+        static delete(ctx,x,y,w,h){
+            ctx.clearRect(x,y,w,h);
+        }
 
         public static enable(ctx) {
+            ctx.deleteText = function(x,y,w,h) {return CanvasTextFunctions.delete(ctx,x,y,w,h);};
             ctx.drawText = function(font,size,x,y,text) { return CanvasTextFunctions.draw( ctx, font,size,x,y,text); };
             ctx.measureText = function(font,size,text) { return CanvasTextFunctions.measure( font,size,text); };
             ctx.fontAscent = function(font,size) { return CanvasTextFunctions.ascent(font,size); };

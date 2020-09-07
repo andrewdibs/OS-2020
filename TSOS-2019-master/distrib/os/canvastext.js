@@ -81,7 +81,11 @@ var TSOS;
             ctx.restore();
             return total;
         };
+        CanvasTextFunctions["delete"] = function (ctx, x, y, w, h) {
+            ctx.clearRect(x, y, w, h);
+        };
         CanvasTextFunctions.enable = function (ctx) {
+            ctx.deleteText = function (x, y, w, h) { return CanvasTextFunctions["delete"](ctx, x, y, w, h); };
             ctx.drawText = function (font, size, x, y, text) { return CanvasTextFunctions.draw(ctx, font, size, x, y, text); };
             ctx.measureText = function (font, size, text) { return CanvasTextFunctions.measure(font, size, text); };
             ctx.fontAscent = function (font, size) { return CanvasTextFunctions.ascent(font, size); };
