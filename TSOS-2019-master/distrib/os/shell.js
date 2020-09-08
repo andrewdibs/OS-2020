@@ -48,6 +48,9 @@ var TSOS;
             // rot13 <string>
             sc = new TSOS.ShellCommand(this.shellRot13, "rot13", "<string> - Does rot13 obfuscation on <string>.");
             this.commandList[this.commandList.length] = sc;
+            // BSOD
+            sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "- triggers a kernel trap error.");
+            this.commandList[this.commandList.length] = sc;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
@@ -188,6 +191,10 @@ var TSOS;
         Shell.prototype.shellWhereAmI = function (args) {
             _StdOut.putText("lost");
         };
+        Shell.prototype.shellBSOD = function (args) {
+            _StdOut.putText("Kernel Trap Error!");
+            _Kernel.krnTrapError("BSOD AHHH");
+        };
         Shell.prototype.shellFortune = function (args) {
             _StdOut.putText("you are not illiterate.. :)");
         };
@@ -257,6 +264,9 @@ var TSOS;
                         break;
                     case "load":
                         _StdOut.putText("Loads the program given by the user from program input");
+                        break;
+                    case "bsod":
+                        _StdOut.putText("Sends an error through the kernel.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

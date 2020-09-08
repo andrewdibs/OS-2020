@@ -79,6 +79,12 @@ module TSOS {
                                   "<string> - Does rot13 obfuscation on <string>.");
             this.commandList[this.commandList.length] = sc;
 
+            // BSOD
+            sc = new ShellCommand(this.shellBSOD,
+                "bsod",
+                "- triggers a kernel trap error.");
+            this.commandList[this.commandList.length] = sc;
+
             // prompt <string>
             sc = new ShellCommand(this.shellPrompt,
                                   "prompt",
@@ -240,6 +246,11 @@ module TSOS {
 
         }
 
+        public shellBSOD(args: string[]){
+            _StdOut.putText("Kernel Trap Error!");
+            _Kernel.krnTrapError("BSOD AHHH");
+        }
+
         public shellFortune(args: string[]){
             _StdOut.putText("you are not illiterate.. :)");
 
@@ -315,7 +326,10 @@ module TSOS {
                         break; 
                     case "load":
                         _StdOut.putText("Loads the program given by the user from program input");
-                        break;  
+                        break;
+                    case "bsod":
+                        _StdOut.putText("Sends an error through the kernel.");
+                        break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }

@@ -7,7 +7,7 @@
 var TSOS;
 (function (TSOS) {
     var Console = /** @class */ (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, bufferHistory, historyIndex) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, bufferHistory, historyIndex, tabList, tabIndex) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
@@ -15,6 +15,8 @@ var TSOS;
             if (buffer === void 0) { buffer = ""; }
             if (bufferHistory === void 0) { bufferHistory = []; }
             if (historyIndex === void 0) { historyIndex = 0; }
+            if (tabList === void 0) { tabList = []; }
+            if (tabIndex === void 0) { tabIndex = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
@@ -22,6 +24,8 @@ var TSOS;
             this.buffer = buffer;
             this.bufferHistory = bufferHistory;
             this.historyIndex = historyIndex;
+            this.tabList = tabList;
+            this.tabIndex = tabIndex;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -53,6 +57,9 @@ var TSOS;
                     this.backspace();
                 }
                 else if (chr == String.fromCharCode(9)) { // tab completion
+                    if (this.buffer.length > 0) {
+                        this.tabComplete();
+                    }
                 }
                 else if (chr === "Ctrl-c") { // terminate program
                 }
@@ -98,6 +105,36 @@ var TSOS;
         Console.prototype.deleteCommand = function () {
             while (this.buffer.length > 0) {
                 this.backspace();
+            }
+        };
+        Console.prototype.tabComplete = function () {
+            if (this.tabList.length > 1) {
+                this.deleteCommand();
+                this.buffer = this.tabList[this.tabIndex];
+                this.putText(this.buffer);
+                if (this.tabIndex == this.tabList.length - 1) {
+                    this.tabIndex = 0;
+                }
+                else {
+                    this.tabIndex++;
+                }
+            }
+            else {
+                var reg = new RegExp("^" + this.buffer);
+                this.tabList = [];
+                this.tabIndex = 0;
+                for (var i = 0; i < _OsShell.commandList.length; i++) {
+                    var str = _OsShell.commandList[i].command;
+                    if (reg.test(str)) {
+                        this.tabList.push(_OsShell.commandList[i].command);
+                    }
+                }
+                if (this.tabList.length > 0) {
+                    this.deleteCommand();
+                    this.buffer = this.tabList[this.tabIndex];
+                    this.putText(this.buffer);
+                    this.tabIndex++;
+                }
             }
         };
         Console.prototype.putText = function (text) {

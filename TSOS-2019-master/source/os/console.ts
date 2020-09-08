@@ -15,7 +15,9 @@ module TSOS {
                     public currentYPosition = _DefaultFontSize,
                     public buffer = "",
                     public bufferHistory = [],
-                    public historyIndex = 0) {
+                    public historyIndex = 0,
+                    public tabList = [],
+                    public tabIndex = 0) {
                     
         }
 
@@ -52,7 +54,9 @@ module TSOS {
                     this.backspace();
                 }
                 else if(chr == String.fromCharCode(9)){ // tab completion
-
+                    if (this.buffer.length>0){
+                        this.tabComplete();
+                    }
                 }
                 else if(chr === "Ctrl-c"){ // terminate program
                     
@@ -102,6 +106,39 @@ module TSOS {
             while(this.buffer.length > 0){
                 this.backspace();
             }
+        }
+
+        public tabComplete(): void{
+            // If any commands in tablist cycle through options
+            if (this.tabList.length > 1){
+                this.deleteCommand();
+                this.buffer = this.tabList[this.tabIndex];
+                this.putText(this.buffer);
+                if (this.tabIndex == this.tabList.length - 1){
+                    this.tabIndex = 0;
+                }else{
+                    this.tabIndex++;
+                }
+            }
+            // Create tab list with matching commands
+            else{
+                let reg = new RegExp(`^${this.buffer}`);
+                this.tabList = [];
+                this.tabIndex = 0;
+                for (var i = 0; i < _OsShell.commandList.length; i++){
+                    var str = _OsShell.commandList[i].command;
+                    if(reg.test(str)){
+                        this.tabList.push(_OsShell.commandList[i].command);
+                    }
+                }// print command
+                if (this.tabList.length > 0){
+                    this.deleteCommand();
+                    this.buffer = this.tabList[this.tabIndex];
+                    this.putText(this.buffer);
+                    this.tabIndex++;
+                }
+            }
+
         }
 
         public putText(text): void {
