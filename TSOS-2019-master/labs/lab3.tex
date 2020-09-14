@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Lab3}
+\author{Andrew DiBella }
+\date{14 September 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Internal and External Fragmentation}
+There are two different types of fragmentation that you can implement on an operating system. Internal fragmentation is the process of splitting memory into fixed-sized blocks. This occurs when the process is larger than the allotted memory. The internal fragmentation is the difference between the allocated memory and the required space. Internal fragmentation uses best-fit memory allocation. On the other hand, external fragmentation occurs when there is enough memory allocated for the given process, but the memory is currently allocated in a non-contiguous manner. This happens when a process is removed. External Fragmentation uses compaction, segmentation, and paging.   
+\section{Memory Partitions}
+First Fit: 
+\begin{enumerate}
+  \item 212KB -- 300KB partition
+  \item 417KB -- 600KB partition
+  \item 112KB -- 288KB partition
+  \item 426KB -- not enough memory allocated
+\end{enumerate}
+Best Fit: 
+\begin{enumerate}
+  \item 212KB -- 300KB partition
+  \item 417KB -- 500KB partition
+  \item 112KB -- 200KB partition
+  \item 426KB -- 600KB partition 
+\end{enumerate}
+Worst Fit: 
+\begin{enumerate}
+  \item 212KB -- 600KB partition
+  \item 417KB -- 500KB partition
+  \item 112KB -- 388KB partition
+  \item 426KB -- not enough memory allocated
+\end{enumerate}
+\end{document}
