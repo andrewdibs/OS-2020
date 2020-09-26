@@ -221,14 +221,31 @@ var TSOS;
             program = program.toUpperCase().replace(/\s/g, "");
             // validate only hex Symbols
             var regex = /^[0-9A-Fa-f]+$/;
-            var priority;
+            // set default priority to 0
+            var priority = 0;
+            // if priority given and is a number update priority
             if (args[0])
                 priority = parseInt(args[0]);
-            if (regex.test(program) && isNaN(priority)) { // load program
+            if (regex.test(program) && !isNaN(priority)) { // load program
                 _StdOut.putText("Program Valid. Command run <id> to execute.");
+                // TODO :check for available space in memory
+                // if space is available
+                // if(){}
+                // Create PCB 
+                var process = new TSOS.ProcessControlBlock();
+                process.pid = _CurrentPID;
+                var commandList = program.split(" ");
+                // load PCB into memory 
+                return;
+                _MemoryManager.loadToMemory(commandList);
+                // increment PID counter
+                _CurrentPID++;
+                // update Tables accordingly
+                _StdOut.putText("Program loaded successfully. PID: " + process.pid);
             }
             else {
                 _StdOut.putText("Invalid hex Program or priority id number..");
+                return;
             }
         };
         Shell.prototype.shellMan = function (args) {

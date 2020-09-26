@@ -22,6 +22,7 @@ var KEYBOARD_IRQ = 1;
 //
 var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _OSclock = 0; // Page 23.
+var _CurrentPID = 0; // sets the PID globally so it is not reused
 var _Mode = 0; // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 var _Canvas; // Initialized in Control.hostInit().
 var _DrawingContext; // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.
@@ -37,6 +38,9 @@ var _KernelBuffers = null;
 // Standard input and output
 var _StdIn = null;
 var _StdOut = null;
+var _PCB;
+var _Memory;
+var _MemoryManager;
 // UI
 var _Console;
 var _OsShell;

@@ -1,9 +1,23 @@
 var TSOS;
 (function (TSOS) {
-    var processControlBlock = /** @class */ (function () {
-        function processControlBlock() {
+    var ProcessControlBlock = /** @class */ (function () {
+        function ProcessControlBlock(pid, PC, Xreg, Yreg, Zflag, Acc, IR) {
+            if (pid === void 0) { pid = 0; }
+            if (PC === void 0) { PC = 0; }
+            if (Xreg === void 0) { Xreg = 0; }
+            if (Yreg === void 0) { Yreg = 0; }
+            if (Zflag === void 0) { Zflag = 0; }
+            if (Acc === void 0) { Acc = 0; }
+            if (IR === void 0) { IR = ""; }
+            this.pid = pid;
+            this.PC = PC;
+            this.Xreg = Xreg;
+            this.Yreg = Yreg;
+            this.Zflag = Zflag;
+            this.Acc = Acc;
+            this.IR = IR;
         }
-        return processControlBlock;
+        return ProcessControlBlock;
     }());
-    TSOS.processControlBlock = processControlBlock;
+    TSOS.ProcessControlBlock = ProcessControlBlock;
 })(TSOS || (TSOS = {}));

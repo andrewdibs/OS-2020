@@ -1,9 +1,14 @@
 var TSOS;
 (function (TSOS) {
-    var memoryManager = /** @class */ (function () {
-        function memoryManager() {
+    var MemoryManager = /** @class */ (function () {
+        function MemoryManager() {
         }
-        return memoryManager;
+        MemoryManager.prototype.loadToMemory = function (program) {
+            for (var i = 0; i < program.length; i++) {
+                _Memory.locations[i] = program[i];
+            }
+        };
+        return MemoryManager;
     }());
-    TSOS.memoryManager = memoryManager;
+    TSOS.MemoryManager = MemoryManager;
 })(TSOS || (TSOS = {}));
