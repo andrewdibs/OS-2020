@@ -139,27 +139,6 @@ var TSOS;
                 }
             }
         };
-        Console.prototype.lineWrap = function (text) {
-            var ray = [];
-            var i = 0;
-            var width = _Canvas.width;
-            while (i < text.length) {
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text.slice(0, i));
-                if (this.currentXPosition + offset > width) {
-                    ray.push(text.slice(0, i - 1));
-                    text = text.slice(i - 1);
-                    i = 0;
-                    width = 0;
-                }
-                i++;
-            }
-            ray.push(text);
-            if (text === ray[0]) {
-                ray.push(ray[0]);
-                ray[0] = "";
-            }
-            return ray;
-        };
         Console.prototype.putText = function (text) {
             /*  My first inclination here was to write two functions: putChar() and putString().
                 Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
@@ -169,37 +148,38 @@ var TSOS;
                 decided to write one function and use the term "text" to connote string or char.
             */
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                // handle line wrap if text reaches end of canvas width
-                if (offset + this.currentXPosition > _Canvas.width) {
-                    if (text.length == 1) {
-                        this.advanceLine();
-                        this.putText(text);
-                    }
-                    else {
-                        // Line Wrap text
-                        var newText = this.lineWrap(text);
-                        var i = 0;
-                        while (i < newText.length) {
-                            if (newText[i] == "") {
-                                i++;
-                            }
-                            else {
-                                this.putText(newText[i]);
-                                if (i < newText.length - 1)
-                                    this.advanceLine();
+                // handle line wrapping 
+                // if the cursor x position moves off the console advance the line
+                if (this.currentXPosition + _DrawingContext.measureText(this.currentFont, this.currentFontSize, text) > _Canvas.width) {
+                    if (text.length > 1) {
+                        var curX = this.currentXPosition;
+                        for (var i = 0; i < text.length; i++) {
+                            curX += _DrawingContext.measureText(this.currentFont, this.currentFontSize, text.charAt(i));
+                            // use recursion to continuously put text on new line 
+                            // this allows the buffer to be unaffected
+                            if (curX > _Canvas.width) {
+                                var start = text.substring(0, i);
+                                var end = text.substring(i);
+                                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, start);
+                                this.advanceLine();
+                                this.putText(end);
+                                break;
                             }
                         }
                     }
+                    else {
+                        // advance to next line and update curernt x position
+                        this.advanceLine();
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                        offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                        this.currentXPosition += offset;
+                    }
                 }
                 else {
-                    // draw normally 
+                    // otherwise draw text normally 
                     _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                    this.currentXPosition = this.currentXPosition + offset;
-                    this.buffer += text;
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                    this.currentXPosition += offset;
                 }
             }
         };

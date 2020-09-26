@@ -18,7 +18,6 @@ module TSOS {
                     public historyIndex = 0,
                     public tabList = [],
                     public tabIndex = 0) {
-                    
         }
 
         public init(): void {
@@ -140,29 +139,7 @@ module TSOS {
             }
 
         }
-        public lineWrap(text){
-            let ray = [];
-            let i =0; 
-            let width = _Canvas.width;
-
-            while(i < text.length){
-                var offset = _DrawingContext.measureText(this.currentFont,this.currentFontSize, text.slice(0,i));
-                if(this.currentXPosition + offset > width){
-                    ray.push(text.slice(0,i-1));
-                    text = text.slice(i - 1);
-                    i=0;
-                    width = 0;
-                }
-                i++;
-            }
-            ray.push(text);
-            if (text === ray[0]){
-                ray.push(ray[0]);
-                ray[0] = "";
-            }
-            return ray;
-
-        }
+    
 
         public putText(text): void {
             /*  My first inclination here was to write two functions: putChar() and putString().
@@ -172,40 +149,44 @@ module TSOS {
                 do the same thing, thereby encouraging confusion and decreasing readability, I
                 decided to write one function and use the term "text" to connote string or char.
             */
+            
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                
-                // handle line wrap if text reaches end of canvas width
-                if (offset + this.currentXPosition > _Canvas.width){
-                    if(text.length == 1){
-                        this.advanceLine();
-                        this.putText(text);
-                    }
-                    else{
-                        // Line Wrap text
-                        let newText = this.lineWrap(text);
-                        let i =0;
-                        while (i < newText.length){
-                            if (newText[i] == ""){
-                                i++;
-                            }
-                            else{
-                                this.putText(newText[i]);
-                                if (i<newText.length - 1) this.advanceLine();
+                // handle line wrapping 
+                // if the cursor x position moves off the console advance the line
+                if (this.currentXPosition + _DrawingContext.measureText(this.currentFont, this.currentFontSize, text) > _Canvas.width){
+                    if (text.length > 1) {
+                        let curX = this.currentXPosition;
+                        for (let i =0; i < text.length;i++){
+                            curX += _DrawingContext.measureText(this.currentFont,this.currentFontSize, text.charAt(i));
+                            // use recursion to continuously put text on new line 
+                            // this allows the buffer to be unaffected
+                            if(curX > _Canvas.width){
+                                let start = text.substring(0,i);
+                                let end = text.substring(i);
+                                _DrawingContext.drawText(this.currentFont, this.currentFontSize,this.currentXPosition,this.currentYPosition,start);
+                                this.advanceLine(); 
+                                this.putText(end);
+                                break;
                             }
                         }
                     }
+                    else{
+                        // advance to next line and update curernt x position
+                        this.advanceLine();
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize,this.currentXPosition,this.currentYPosition, text);
+                        offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                        this.currentXPosition += offset;
+                    }
+                    
                 }
                 else{
-                    // draw normally 
-                    _DrawingContext.drawText(this.currentFont,this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                    this.currentXPosition = this.currentXPosition + offset;
-                    this.buffer += text; 
+                    // otherwise draw text normally 
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                    this.currentXPosition += offset; 
                 }
             }
+            
          }
 
         public advanceLine(): void {
