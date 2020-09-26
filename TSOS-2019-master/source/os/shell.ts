@@ -282,10 +282,13 @@ module TSOS {
             program = program.toUpperCase().replace(/\s/g,"");
             // validate only hex Symbols
             let regex = /^[0-9A-Fa-f]+$/;
-            if (regex.test(program)){ // load program
+            let priority;
+            if (args[0])
+                priority = parseInt(args[0]);
+            if (regex.test(program) && isNaN(priority)){ // load program
                 _StdOut.putText("Program Valid. Command run <id> to execute.")
             }else{
-                _StdOut.putText("Invalid hex Program..");
+                _StdOut.putText("Invalid hex Program or priority id number..");
             }
 
         }
