@@ -108,6 +108,7 @@ var TSOS;
             }
         };
         Console.prototype.tabComplete = function () {
+            // If any commands in tablist cycle through options
             if (this.tabList.length > 1) {
                 this.deleteCommand();
                 this.buffer = this.tabList[this.tabIndex];
@@ -119,6 +120,7 @@ var TSOS;
                     this.tabIndex++;
                 }
             }
+            // Create tab list with matching commands
             else {
                 var reg = new RegExp("^" + this.buffer);
                 this.tabList = [];
@@ -128,7 +130,7 @@ var TSOS;
                     if (reg.test(str)) {
                         this.tabList.push(_OsShell.commandList[i].command);
                     }
-                }
+                } // print command
                 if (this.tabList.length > 0) {
                     this.deleteCommand();
                     this.buffer = this.tabList[this.tabIndex];
@@ -136,6 +138,27 @@ var TSOS;
                     this.tabIndex++;
                 }
             }
+        };
+        Console.prototype.lineWrap = function (text) {
+            var ray = [];
+            var i = 0;
+            var width = _Canvas.width;
+            while (i < text.length) {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text.slice(0, i));
+                if (this.currentXPosition + offset > width) {
+                    ray.push(text.slice(0, i - 1));
+                    text = text.slice(i - 1);
+                    i = 0;
+                    width = 0;
+                }
+                i++;
+            }
+            ray.push(text);
+            if (text === ray[0]) {
+                ray.push(ray[0]);
+                ray[0] = "";
+            }
+            return ray;
         };
         Console.prototype.putText = function (text) {
             /*  My first inclination here was to write two functions: putChar() and putString().
@@ -150,7 +173,34 @@ var TSOS;
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
+                // handle line wrap if text reaches end of canvas width
+                if (offset + this.currentXPosition > _Canvas.width) {
+                    if (text.length == 1) {
+                        this.advanceLine();
+                        this.putText(text);
+                    }
+                    else {
+                        // Line Wrap text
+                        var newText = this.lineWrap(text);
+                        var i = 0;
+                        while (i < newText.length) {
+                            if (newText[i] == "") {
+                                i++;
+                            }
+                            else {
+                                this.putText(newText[i]);
+                                if (i < newText.length - 1)
+                                    this.advanceLine();
+                            }
+                        }
+                    }
+                }
+                else {
+                    // draw normally 
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                    this.currentXPosition = this.currentXPosition + offset;
+                    this.buffer += text;
+                }
             }
         };
         Console.prototype.advanceLine = function () {
