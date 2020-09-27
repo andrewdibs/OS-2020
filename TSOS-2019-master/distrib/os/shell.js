@@ -60,6 +60,9 @@ var TSOS;
             // load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads the program in Program input.");
             this.commandList[this.commandList.length] = sc;
+            // run
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<PID> - Runs the program assigned to the given PID.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             // Display the initial prompt.
@@ -239,13 +242,30 @@ var TSOS;
                 // Load the program to memory 
                 _MemoryManager.loadToMemory(codeList);
                 _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
-                // increment PID counter
                 _CurrentPID++;
-                // update Tables accordingly
+                // TODO: update Tables accordingly
             }
             else {
                 _StdOut.putText("Invalid hex Program or priority id number..");
                 return;
+            }
+        };
+        Shell.prototype.shellRun = function (args) {
+            // check for valid arguments
+            if (args[0]) {
+                var id = args[0];
+                if (!isNaN(parseInt(id))) {
+                    // if pcb is in pcb list then execute program
+                    if (_MemoryManager.isValidPCB(id)) {
+                        _CPU.isExecuting = true;
+                        _StdOut.putText("Running PID: " + id);
+                        return;
+                    }
+                    _StdOut.putText("Invalid program id.");
+                }
+            }
+            else {
+                _StdOut.putText("Input a process id - run <PID>");
             }
         };
         Shell.prototype.shellMan = function (args) {
@@ -287,6 +307,9 @@ var TSOS;
                         break;
                     case "bsod":
                         _StdOut.putText("Sends an error through the kernel.");
+                        break;
+                    case "run":
+                        _StdOut.putText("Runs the program specified by the PID argument given.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

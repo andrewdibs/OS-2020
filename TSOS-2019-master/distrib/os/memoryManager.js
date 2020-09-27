@@ -3,18 +3,18 @@ var TSOS;
     var MemoryManager = /** @class */ (function () {
         function MemoryManager() {
         }
-        MemoryManager.prototype.createProcess = function (pid, codeList) {
-            // check for available space
-            var pcb = new TSOS.ProcessControlBlock();
-            pcb.pid = pid;
-        };
         MemoryManager.prototype.loadToMemory = function (program) {
-            for (var i_1 = 0; i_1 < program.length; i_1++) {
-                _Memory.locations[i_1] = program[i_1];
+            for (var i = 0; i < program.length; i++) {
+                _Memory.locations[i] = program[i];
             }
-            for (var i = 0; _Memory.locations.length; i++) {
-                console.log(_Memory.locations[i]);
+        };
+        MemoryManager.prototype.isValidPCB = function (pid) {
+            for (var _i = 0, _PCB_1 = _PCB; _i < _PCB_1.length; _i++) {
+                var pcb = _PCB_1[_i];
+                if (pcb.pid == pid)
+                    return true;
             }
+            return false;
         };
         return MemoryManager;
     }());

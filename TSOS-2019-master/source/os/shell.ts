@@ -104,6 +104,13 @@ module TSOS {
                                   "load",
                                   "- Loads the program in Program input.");
             this.commandList[this.commandList.length] = sc;
+
+            // run
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<PID> - Runs the program assigned to the given PID.");
+            this.commandList[this.commandList.length] = sc;
+            
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             
@@ -296,7 +303,7 @@ module TSOS {
                 // TODO :check for available space in memory
                 // if space is available
                 // if(){}
-                
+
                 // Create PCB and add to PCB list 
                 var currentProcess = new ProcessControlBlock();
                 currentProcess.pid = _CurrentPID;
@@ -309,12 +316,7 @@ module TSOS {
                 _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                 _CurrentPID++;
 
-                // update Tables accordingly
-
-                
-
-                
-
+                // TODO: update Tables accordingly
 
 
             }else{
@@ -322,6 +324,26 @@ module TSOS {
                 return;
             }
 
+        }
+
+        public shellRun(args: string[]){
+
+            // check for valid arguments
+            if(args[0]){
+                var id = args[0];
+                if(!isNaN(parseInt(id))){
+                    // if pcb is in pcb list then execute program
+                    if(_MemoryManager.isValidPCB(id)){
+                        _CPU.isExecuting = true;
+                        _StdOut.putText("Running PID: " + id);
+                        return;
+                    }
+                    _StdOut.putText("Invalid program id.");
+                }
+            }
+            else{
+                _StdOut.putText("Input a process id - run <PID>");
+            }
         }
 
         public shellMan(args: string[]) {
@@ -363,6 +385,9 @@ module TSOS {
                         break;
                     case "bsod":
                         _StdOut.putText("Sends an error through the kernel.");
+                        break;
+                    case "run":
+                        _StdOut.putText("Runs the program specified by the PID argument given.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
