@@ -296,6 +296,7 @@ module TSOS {
                 // TODO :check for available space in memory
                 // if space is available
                 // if(){}
+                
                 // Create PCB and add to PCB list 
                 var currentProcess = new ProcessControlBlock();
                 currentProcess.pid = _CurrentPID;
@@ -306,7 +307,6 @@ module TSOS {
                 _MemoryManager.loadToMemory(codeList);
 
                 _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
-                // increment PID counter
                 _CurrentPID++;
 
                 // update Tables accordingly
