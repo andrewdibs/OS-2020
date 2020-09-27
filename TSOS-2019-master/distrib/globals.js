@@ -38,7 +38,7 @@ var _KernelBuffers = null;
 // Standard input and output
 var _StdIn = null;
 var _StdOut = null;
-var _PCB;
+var _PCB = [];
 var _Memory;
 var _MemoryManager;
 // UI

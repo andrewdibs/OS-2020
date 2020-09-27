@@ -49,9 +49,12 @@ var _KernelBuffers = null;
 var _StdIn:  TSOS.Console = null; 
 var _StdOut: TSOS.Console = null;
 
-var _PCB: TSOS.ProcessControlBlock;
+var _PCB = [];
+// Hardware (host)
 var _Memory: TSOS.Memory;
-var _MemoryManager: TSOS.MemoryManager;
+var _MemoryAccessor: TSOS.MemoryAccessor;
+// Software (OS)
+var _MemoryManager: any = null;
 
 // UI
 var _Console: TSOS.Console;

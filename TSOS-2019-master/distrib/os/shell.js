@@ -232,8 +232,11 @@ var TSOS;
                 // TODO :check for available space in memory
                 // if space is available
                 // if(){}
-                // Create PCB
-                _MemoryManager.createProcess(_CurrentPID, program);
+                // Create PCB and add to PCB list 
+                var currentProcess = new TSOS.ProcessControlBlock();
+                currentProcess.pid = _CurrentPID;
+                _PCB.push(currentProcess);
+                _MemoryManager.loadToMemory(codeList);
                 _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                 // increment PID counter
                 _CurrentPID++;

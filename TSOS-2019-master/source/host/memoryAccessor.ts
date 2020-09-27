@@ -1,6 +1,6 @@
 module TSOS{
 
-    export class memoryAccessor{
+    export class MemoryAccessor{
         constructor(){
 
         }
