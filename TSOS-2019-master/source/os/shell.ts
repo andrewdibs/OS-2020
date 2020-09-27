@@ -10,7 +10,9 @@
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
 module TSOS {
+    
     export class Shell {
+        
         // Properties
         public promptStr = ">";
         public commandList = [];
@@ -279,6 +281,7 @@ module TSOS {
         public shellLoad(args: string[]){
             let program = _ProgramInputBox.value;
             // remove white space
+            let codeList = program.toUpperCase().split(" "); 
             program = program.toUpperCase().replace(/\s/g,"");
             // validate only hex Symbols
             let regex = /^[0-9A-Fa-f]+$/;
@@ -293,22 +296,17 @@ module TSOS {
                 // TODO :check for available space in memory
                 // if space is available
                 // if(){}
-                // Create PCB 
-                let process = new ProcessControlBlock();
-                process.pid = _CurrentPID;
-                let commandList = program.split(" ");
-                // load PCB into memory 
-                return;
-                _MemoryManager.loadToMemory(commandList);
+                // Create PCB
+                var currentProcess = new ProcessControlBlock(); 
+                //_MemoryManager.createProcess(_CurrentPID, program);
 
-
-
+                _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                 // increment PID counter
                 _CurrentPID++;
 
                 // update Tables accordingly
 
-                _StdOut.putText("Program loaded successfully. PID: " + process.pid);
+                
 
                 
 

@@ -218,6 +218,7 @@ var TSOS;
         Shell.prototype.shellLoad = function (args) {
             var program = _ProgramInputBox.value;
             // remove white space
+            var codeList = program.toUpperCase().split(" ");
             program = program.toUpperCase().replace(/\s/g, "");
             // validate only hex Symbols
             var regex = /^[0-9A-Fa-f]+$/;
@@ -231,17 +232,12 @@ var TSOS;
                 // TODO :check for available space in memory
                 // if space is available
                 // if(){}
-                // Create PCB 
-                var process = new TSOS.ProcessControlBlock();
-                process.pid = _CurrentPID;
-                var commandList = program.split(" ");
-                // load PCB into memory 
-                return;
-                _MemoryManager.loadToMemory(commandList);
+                // Create PCB
+                _MemoryManager.createProcess(_CurrentPID, program);
+                _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                 // increment PID counter
                 _CurrentPID++;
                 // update Tables accordingly
-                _StdOut.putText("Program loaded successfully. PID: " + process.pid);
             }
             else {
                 _StdOut.putText("Invalid hex Program or priority id number..");
