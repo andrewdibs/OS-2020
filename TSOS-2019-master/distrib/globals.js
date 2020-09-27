@@ -39,8 +39,11 @@ var _KernelBuffers = null;
 var _StdIn = null;
 var _StdOut = null;
 var _PCB = [];
+// Hardware (host)
 var _Memory;
-var _MemoryManager;
+var _MemoryAccessor;
+// Software (OS)
+var _MemoryManager = null;
 // UI
 var _Console;
 var _OsShell;
