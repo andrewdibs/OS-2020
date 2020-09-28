@@ -46,9 +46,8 @@ var TSOS;
         Cpu.prototype.executeOpCode = function (command) {
             switch (command) {
                 case "A9":
-                    this.Acc = _Memory.locations[this.PC + 1];
-                    this.PC += 2;
-                    this.loadAcc();
+                    this.PC++;
+                    this.Acc = parseInt(_Memory.locations[this.PC++], 16);
                     break;
                 case "AD":
                     this.loadAcc();
@@ -56,21 +55,121 @@ var TSOS;
                 case "8D":
                     this.storeAcc();
                     break;
+                case "6D":
+                    this.addWithCarry();
+                    break;
+                case "A2":
+                    //  loads the x register with constant
+                    this.loadXregConst();
+                    break;
+                case "AE":
+                    // load x register with value from memory
+                    this.loadXregMemory();
+                    break;
+                case "A0":
+                    // load y register with constant 
+                    this.loadYregConst();
+                    break;
+                case "AC":
+                    // loads y register with value from memory
+                    this.loadYregMemory();
+                    break;
+                case "EA":
+                    // do nothing
+                    break;
+                case "00":
+                    // break
+                    this.isExecuting = false;
+                    break;
+                case "EC":
+                    // compare x reg with memory value and if equal : set zflag to 1
+                    this.compareXtoMemory();
+                    break;
+                case "D0":
+                    //branch if zflag is currently 0 
+                    this.branch();
+                    break;
+                case "EE":
+                    // increment
+                    this.increment();
+                    break;
+                case "FF":
+                    // system call 
+                    this.systemCall();
+                    break;
+                default:
+                    console.log("invalid op codes");
             }
         };
+        // A9
         Cpu.prototype.loadAcc = function () {
             // load the accumulator with data from memory address
             this.PC++;
-            var value = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 16);
-            this.Acc = _MemoryManager.read(value);
-            console.log(this.Acc);
+            var location = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC++), 16);
+            this.Acc = parseInt(_MemoryManager.read(location), 16);
+            this.PC++;
         };
+        //AD
         Cpu.prototype.storeAcc = function () {
             this.PC++;
             // find sta address and write acc to that location
             var location = parseInt(_MemoryManager.getLocation(this.PC), 16);
             _MemoryManager.writeByte(location, parseInt(this.Acc.toString(), 16));
             this.PC++;
+        };
+        // 6D // hmmm not sure if this is working correctly
+        Cpu.prototype.addWithCarry = function () {
+            // get value of next bytes location and add to the accumulator 
+            this.PC++;
+            // read next two bytes
+            var location = this.getAddress();
+            // add to accumulator
+            this.Acc += parseInt(_MemoryManager.read(location), 16);
+            this.PC++;
+            console.log("location: " + location);
+            console.log("ACC " + this.Acc);
+            console.log("PC: " + this.PC);
+            console.log(parseInt(_MemoryManager.read(location), 16));
+        };
+        // A2
+        Cpu.prototype.loadXregConst = function () {
+            this.PC++;
+            this.Xreg = parseInt(_MemoryManager.read(this.PC++));
+        };
+        // AE
+        Cpu.prototype.loadXregMemory = function () {
+            this.PC++;
+            var location = this.getAddress();
+            this.Xreg = parseInt(_MemoryManager.read(location), 16);
+            this.PC++;
+            //console.log("location: "+location);
+            console.log("ACC " + this.Acc);
+            console.log("PC: " + this.PC);
+            console.log("xreg: " + this.Xreg);
+            //console.log(parseInt(_MemoryManager.read(location),16));
+        };
+        // A0
+        Cpu.prototype.loadYregConst = function () {
+            this.PC++;
+            this.Yreg = parseInt(_MemoryManager.read(this.PC++));
+        };
+        // AC
+        Cpu.prototype.loadYregMemory = function () {
+        };
+        // EC
+        Cpu.prototype.compareXtoMemory = function () {
+        };
+        // D0
+        Cpu.prototype.branch = function () {
+        };
+        // EE
+        Cpu.prototype.increment = function () {
+        };
+        // FF
+        Cpu.prototype.systemCall = function () {
+        };
+        Cpu.prototype.getAddress = function () {
+            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 10);
         };
         return Cpu;
     }());

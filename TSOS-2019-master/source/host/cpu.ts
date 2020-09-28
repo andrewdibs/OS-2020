@@ -48,8 +48,8 @@ module TSOS {
         public executeOpCode(command){
             switch(command){
                 case "A9":
-                    this.Acc = _Memory.locations[this.PC + 1];
-                    this.PC += 2;
+                    this.PC++;
+                    this.Acc = parseInt(_Memory.locations[this.PC++],16);
                     break;
                 case "AD": 
                     this.loadAcc();
@@ -108,9 +108,10 @@ module TSOS {
         public loadAcc(){
             // load the accumulator with data from memory address
             this.PC++;
-            var location = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
-            this.Acc = _MemoryManager.read(location);
+            var location = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC++),16);
+            this.Acc = parseInt(_MemoryManager.read(location),16);
             this.PC++;
+            
 
         }
         //AD
@@ -120,36 +121,50 @@ module TSOS {
             var location = parseInt(_MemoryManager.getLocation(this.PC),16);
             _MemoryManager.writeByte(location, parseInt(this.Acc.toString(),16));
             this.PC++;
+            
         }
-        // 6D
+        // 6D // hmmm not sure if this is working correctly
         public addWithCarry(){
             // get value of next bytes location and add to the accumulator 
             this.PC++;
-            
             // read next two bytes
             var location = this.getAddress();
-            this.PC++;
-
+            // add to accumulator
             this.Acc += parseInt(_MemoryManager.read(location), 16);
-
             this.PC++;
+            console.log("location: "+location);
+            console.log("ACC " + this.Acc);
+            console.log("PC: " + this.PC);
+            console.log(parseInt(_MemoryManager.read(location),16));
         }
         // A2
         public loadXregConst(){
-            
-
+            this.PC++;
+            this.Xreg = parseInt(_MemoryManager.read(this.PC++)); 
         }
         // AE
         public loadXregMemory(){
-            
+            this.PC++;
+            var location = this.getAddress();
+            this.Xreg = parseInt(_MemoryManager.read(location),16);
+            this.PC++;
+            //console.log("location: "+location);
+            console.log("ACC " + this.Acc);
+            console.log("PC: " + this.PC);
+            console.log("xreg: " + this.Xreg);
+            //console.log(parseInt(_MemoryManager.read(location),16));
         }
         // A0
         public loadYregConst(){
-            
+            this.PC++;
+            this.Yreg = parseInt(_MemoryManager.read(this.PC++));
         }
         // AC
         public loadYregMemory(){
-            
+            this.PC++;
+            var location = this.getAddress();
+            this.Yreg = parseInt(_MemoryManager.read(location),16);
+            this.PC++;
         }
         // EC
         public compareXtoMemory(){
@@ -170,8 +185,10 @@ module TSOS {
 
 
         public getAddress(){
-            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
+            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),10);
         }
+
+        
 
     }
 }
