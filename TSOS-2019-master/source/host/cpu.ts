@@ -60,10 +60,51 @@ module TSOS {
                 case "6D": 
                     this.addWithCarry();
                     break;
+                case "A2":
+                    //  loads the x register with constant
+                    this.loadXregConst();
+                    break;
+                case "AE":
+                    // load x register with value from memory
+                    this.loadXregMemory(); 
+                    break;
+                case "A0":
+                    // load y register with constant 
+                    this.loadYregConst();
+                    break;
+                case "AC":
+                    // loads y register with value from memory
+                    this.loadYregMemory();
+                    break;
+                case "EA":
+                    // do nothing
+                    break;
+                case "00":
+                    // break
+                    this.isExecuting = false;
+                    break;
+                case "EC":
+                    // compare x reg with memory value and if equal : set zflag to 1
+                    this.compareXtoMemory();
+                    break;
+                case "D0":
+                    //branch if zflag is currently 0 
+                    this.branch();
+                    break;
+                case "EE":
+                    // increment
+                    this.increment();
+                    break;
+                case "FF":
+                    // system call 
+                    this.systemCall();
+                    break; 
+                default: 
+                    console.log("invalid op codes");
             }
         }
 
-
+        // A9
         public loadAcc(){
             // load the accumulator with data from memory address
             this.PC++;
@@ -72,7 +113,7 @@ module TSOS {
             this.PC++;
 
         }
-
+        //AD
         public storeAcc(){
             this.PC++;
             // find sta address and write acc to that location
@@ -80,7 +121,7 @@ module TSOS {
             _MemoryManager.writeByte(location, parseInt(this.Acc.toString(),16));
             this.PC++;
         }
-
+        // 6D
         public addWithCarry(){
             // get value of next bytes location and add to the accumulator 
             this.PC++;
@@ -93,6 +134,40 @@ module TSOS {
 
             this.PC++;
         }
+        // A2
+        public loadXregConst(){
+            
+
+        }
+        // AE
+        public loadXregMemory(){
+            
+        }
+        // A0
+        public loadYregConst(){
+            
+        }
+        // AC
+        public loadYregMemory(){
+            
+        }
+        // EC
+        public compareXtoMemory(){
+            
+        }
+        // D0
+        public branch(){
+            
+        }
+        // EE
+        public increment(){
+            
+        }
+        // FF
+        public systemCall(){
+            
+        }
+
 
         public getAddress(){
             return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
