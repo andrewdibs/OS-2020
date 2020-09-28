@@ -81,6 +81,7 @@ module TSOS {
                     break;
                 case "00":
                     // break
+                    console.log("00");
                     this.isExecuting = false;
                     break;
                 case "EC":
@@ -111,7 +112,6 @@ module TSOS {
             var location = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC++),16);
             this.Acc = parseInt(_MemoryManager.read(location),16);
             this.PC++;
-            
 
         }
         //AD
@@ -147,12 +147,8 @@ module TSOS {
             this.PC++;
             var location = this.getAddress();
             this.Xreg = parseInt(_MemoryManager.read(location),16);
-            this.PC++;
-            //console.log("location: "+location);
-            console.log("ACC " + this.Acc);
-            console.log("PC: " + this.PC);
-            console.log("xreg: " + this.Xreg);
-            //console.log(parseInt(_MemoryManager.read(location),16));
+            this.PC += 2;
+            
         }
         // A0
         public loadYregConst(){
@@ -164,15 +160,29 @@ module TSOS {
             this.PC++;
             var location = this.getAddress();
             this.Yreg = parseInt(_MemoryManager.read(location),16);
-            this.PC++;
+            this.PC += 2;
         }
         // EC
         public compareXtoMemory(){
-            
+            this.PC++;
+            var location = this.getAddress();
+            if(parseInt(_MemoryManager.read(location)) === this.Xreg){
+                this.Zflag = 1;
+            }else{
+                this.Zflag = 0;
+            }
+            this.PC++;
         }
         // D0
         public branch(){
-            
+            this.PC++;
+            if(this.Zflag === 0){
+                this.PC += parseInt(_MemoryManager.read(this.PC),16);
+                this.PC++; // + (this.PC % 256); possible wrap around not sure yet
+            }
+            else{
+                this.PC++;
+            }
         }
         // EE
         public increment(){
@@ -185,7 +195,7 @@ module TSOS {
 
 
         public getAddress(){
-            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),10);
+            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
         }
 
         

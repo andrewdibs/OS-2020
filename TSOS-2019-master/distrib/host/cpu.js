@@ -79,6 +79,7 @@ var TSOS;
                     break;
                 case "00":
                     // break
+                    console.log("00");
                     this.isExecuting = false;
                     break;
                 case "EC":
@@ -141,12 +142,7 @@ var TSOS;
             this.PC++;
             var location = this.getAddress();
             this.Xreg = parseInt(_MemoryManager.read(location), 16);
-            this.PC++;
-            //console.log("location: "+location);
-            console.log("ACC " + this.Acc);
-            console.log("PC: " + this.PC);
-            console.log("xreg: " + this.Xreg);
-            //console.log(parseInt(_MemoryManager.read(location),16));
+            this.PC += 2;
         };
         // A0
         Cpu.prototype.loadYregConst = function () {
@@ -155,12 +151,39 @@ var TSOS;
         };
         // AC
         Cpu.prototype.loadYregMemory = function () {
+            this.PC++;
+            var location = this.getAddress();
+            this.Yreg = parseInt(_MemoryManager.read(location), 16);
+            this.PC += 2;
         };
         // EC
         Cpu.prototype.compareXtoMemory = function () {
+            this.PC++;
+            var location = this.getAddress();
+            if (parseInt(_MemoryManager.read(location)) === this.Xreg) {
+                this.Zflag = 1;
+            }
+            else {
+                this.Zflag = 0;
+            }
+            this.PC++;
         };
         // D0
         Cpu.prototype.branch = function () {
+            this.PC++;
+            if (this.Zflag === 0) {
+                this.PC += parseInt(_MemoryManager.read(this.PC), 16);
+                this.PC++; // + (this.PC % 256); possible wrap around not sure yet
+            }
+            else {
+                this.PC += 2;
+            }
+            //console.log("location: "+location);
+            console.log("ACC " + this.Acc);
+            console.log("PC: " + this.PC);
+            console.log("xreg: " + this.Xreg);
+            console.log("z: " + this.Zflag);
+            //console.log(parseInt(_MemoryManager.read(location),16));
         };
         // EE
         Cpu.prototype.increment = function () {
@@ -169,7 +192,7 @@ var TSOS;
         Cpu.prototype.systemCall = function () {
         };
         Cpu.prototype.getAddress = function () {
-            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 10);
+            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 16);
         };
         return Cpu;
     }());
