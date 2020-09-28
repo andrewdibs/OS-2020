@@ -135,7 +135,7 @@ var TSOS;
         // A2
         Cpu.prototype.loadXregConst = function () {
             this.PC++;
-            this.Xreg = parseInt(_MemoryManager.read(this.PC++));
+            this.Xreg = parseInt(_MemoryManager.read(this.PC++), 16);
         };
         // AE
         Cpu.prototype.loadXregMemory = function () {
@@ -147,7 +147,8 @@ var TSOS;
         // A0
         Cpu.prototype.loadYregConst = function () {
             this.PC++;
-            this.Yreg = parseInt(_MemoryManager.read(this.PC++));
+            this.Yreg = parseInt(_MemoryManager.read(this.PC++), 16);
+            console.log(this.Yreg);
         };
         // AC
         Cpu.prototype.loadYregMemory = function () {
@@ -176,20 +177,41 @@ var TSOS;
                 this.PC++; // + (this.PC % 256); possible wrap around not sure yet
             }
             else {
-                this.PC += 2;
+                this.PC++;
             }
-            //console.log("location: "+location);
-            console.log("ACC " + this.Acc);
-            console.log("PC: " + this.PC);
-            console.log("xreg: " + this.Xreg);
-            console.log("z: " + this.Zflag);
-            //console.log(parseInt(_MemoryManager.read(location),16));
         };
         // EE
         Cpu.prototype.increment = function () {
+            this.PC++;
+            var location = this.getAddress();
+            _MemoryManager.writeByte(location, parseInt(_MemoryManager.read(location), 16) + 1);
+            this.PC += 2;
         };
         // FF
         Cpu.prototype.systemCall = function () {
+            // if the x register = 1 print y register integer
+            var params = [];
+            if (this.Xreg === 1) {
+                params.push(this.Yreg.toString());
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL, params));
+            }
+            if (this.Xreg === 2) {
+                var result = "";
+                for (var i = 0; i + this.Yreg < _Memory.locations.length; i++) {
+                    var location = _Memory.locations[this.Yreg + i];
+                    console.log("location:" + location);
+                    if (location == "00") {
+                        break;
+                    }
+                    else {
+                        result += String.fromCharCode(location);
+                    }
+                }
+                console.log(params[0]);
+                params.push(result);
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL, params));
+            }
+            this.PC++;
         };
         Cpu.prototype.getAddress = function () {
             return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 16);

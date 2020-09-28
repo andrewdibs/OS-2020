@@ -140,7 +140,7 @@ module TSOS {
         // A2
         public loadXregConst(){
             this.PC++;
-            this.Xreg = parseInt(_MemoryManager.read(this.PC++)); 
+            this.Xreg = parseInt(_MemoryManager.read(this.PC++),16); 
         }
         // AE
         public loadXregMemory(){
@@ -153,7 +153,8 @@ module TSOS {
         // A0
         public loadYregConst(){
             this.PC++;
-            this.Yreg = parseInt(_MemoryManager.read(this.PC++));
+            this.Yreg = parseInt(_MemoryManager.read(this.PC++),16);
+            console.log(this.Yreg);
         }
         // AC
         public loadYregMemory(){
@@ -186,11 +187,38 @@ module TSOS {
         }
         // EE
         public increment(){
-            
+            this.PC++;
+            var location = this.getAddress();
+            _MemoryManager.writeByte(location, parseInt(_MemoryManager.read(location),16) + 1);
+            this.PC += 2;
         }
         // FF
         public systemCall(){
+            // if the x register = 1 print y register integer
+            var params = [];
             
+            if (this.Xreg === 1){
+                params.push(this.Yreg.toString());
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL,params));
+            }
+            if (this.Xreg === 2){
+                var result = "";
+                for (var i = 0; i + this.Yreg < _Memory.locations.length; i++){
+                    var location = _Memory.locations[this.Yreg + i];
+                    console.log("location:"+location);
+                    if (location == "00"){
+                        break;
+                    }
+                    else{
+                        result += String.fromCharCode(location);
+                    }
+                }
+                console.log(params[0]);
+                params.push(result)
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL,params));
+            }
+
+            this.PC++;
         }
 
 
