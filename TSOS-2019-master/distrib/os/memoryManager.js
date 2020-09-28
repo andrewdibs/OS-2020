@@ -16,6 +16,17 @@ var TSOS;
             }
             return false;
         };
+        MemoryManager.prototype.getLocation = function (address) {
+            return _Memory.locations[address];
+        };
+        MemoryManager.prototype.writeByte = function (address, value) {
+            if (value.length === 1)
+                value = "0" + value;
+            _Memory.locations[address] = value;
+        };
+        MemoryManager.prototype.read = function (address) {
+            return _Memory.locations[address];
+        };
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;

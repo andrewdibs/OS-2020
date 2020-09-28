@@ -62,6 +62,7 @@ var TSOS;
                     }
                 }
                 else if (chr === "Ctrl-c") { // terminate program
+                    _CPU.isExecuting = false;
                 }
                 else if (chr === "upArrow") { // previous command
                     if (this.historyIndex != 0) {

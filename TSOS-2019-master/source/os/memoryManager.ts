@@ -19,6 +19,20 @@ module TSOS{
         return false;
       }
 
+      public getLocation(address): String{
+        return _Memory.locations[address];
+      }
+
+      public writeByte(address, value): void{
+        if (value.length === 1) value = "0" + value;
+        _Memory.locations[address] = value;
+      }
+
+      public read(address): String{
+        return _Memory.locations[address];
+      }
+
+
   }
 
 

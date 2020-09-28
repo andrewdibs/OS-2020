@@ -39,6 +39,38 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            // get next op code based off the PC counter
+            var command = _Memory.locations[this.PC];
+            this.executeOpCode(command);
+        };
+        Cpu.prototype.executeOpCode = function (command) {
+            switch (command) {
+                case "A9":
+                    this.Acc = _Memory.locations[this.PC + 1];
+                    this.PC += 2;
+                    this.loadAcc();
+                    break;
+                case "AD":
+                    this.loadAcc();
+                    break;
+                case "8D":
+                    this.storeAcc();
+                    break;
+            }
+        };
+        Cpu.prototype.loadAcc = function () {
+            // load the accumulator with data from memory address
+            this.PC++;
+            var value = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC), 16);
+            this.Acc = _MemoryManager.read(value);
+            console.log(this.Acc);
+        };
+        Cpu.prototype.storeAcc = function () {
+            this.PC++;
+            // find sta address and write acc to that location
+            var location = parseInt(_MemoryManager.getLocation(this.PC), 16);
+            _MemoryManager.writeByte(location, parseInt(this.Acc.toString(), 16));
+            this.PC++;
         };
         return Cpu;
     }());

@@ -37,9 +37,66 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-
             
+            // get next op code based off the PC counter
+            var command = _Memory.locations[this.PC];
+            this.executeOpCode(command);
+
 
         }
+
+        public executeOpCode(command){
+            switch(command){
+                case "A9":
+                    this.Acc = _Memory.locations[this.PC + 1];
+                    this.PC += 2;
+                    break;
+                case "AD": 
+                    this.loadAcc();
+                    break;
+                case "8D": 
+                    this.storeAcc();
+                    break;
+                case "6D": 
+                    this.addWithCarry();
+                    break;
+            }
+        }
+
+
+        public loadAcc(){
+            // load the accumulator with data from memory address
+            this.PC++;
+            var location = parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
+            this.Acc = _MemoryManager.read(location);
+            this.PC++;
+
+        }
+
+        public storeAcc(){
+            this.PC++;
+            // find sta address and write acc to that location
+            var location = parseInt(_MemoryManager.getLocation(this.PC),16);
+            _MemoryManager.writeByte(location, parseInt(this.Acc.toString(),16));
+            this.PC++;
+        }
+
+        public addWithCarry(){
+            // get value of next bytes location and add to the accumulator 
+            this.PC++;
+            
+            // read next two bytes
+            var location = this.getAddress();
+            this.PC++;
+
+            this.Acc += parseInt(_MemoryManager.read(location), 16);
+
+            this.PC++;
+        }
+
+        public getAddress(){
+            return parseInt(_MemoryManager.read(this.PC + 1) + _MemoryManager.read(this.PC),16);
+        }
+
     }
 }
