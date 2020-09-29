@@ -54,6 +54,7 @@ var _PCB = [];
 // Hardware (host)
 var _Memory: TSOS.Memory;
 var _MemoryAccessor: TSOS.MemoryAccessor;
+var _SingleStep: boolean = false;
 // Software (OS)
 var _MemoryManager: any = null;
 

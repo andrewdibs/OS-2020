@@ -43,6 +43,7 @@ module TSOS {
             // Set focus on the start button.
             // Use the TypeScript cast to HTMLInputElement
             (<HTMLInputElement> document.getElementById("btnStartOS")).focus();
+            (<HTMLInputElement> document.getElementById("btnStep")).disabled = true;
 
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().
@@ -116,6 +117,19 @@ module TSOS {
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
+        }
+
+        public static singleStep_click(btn): void {
+            _SingleStep = !_SingleStep;
+            if (_SingleStep){
+                btn.value = "Single Step ON";
+                (<HTMLButtonElement>document.getElementById("btnStep")).disabled = false;
+            }
+            else{
+                btn.value = "Single Step OFF";
+                (<HTMLButtonElement>document.getElementById("btnStep")).disabled = true;
+            }
+            
         }
     }
 }

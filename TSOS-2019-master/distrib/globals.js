@@ -43,6 +43,7 @@ var _PCB = [];
 // Hardware (host)
 var _Memory;
 var _MemoryAccessor;
+var _SingleStep = false;
 // Software (OS)
 var _MemoryManager = null;
 // UI
