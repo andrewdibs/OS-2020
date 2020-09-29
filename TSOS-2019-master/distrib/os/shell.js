@@ -239,6 +239,7 @@ var TSOS;
                 var currentProcess = new TSOS.ProcessControlBlock();
                 currentProcess.pid = _CurrentPID;
                 _PCB.push(currentProcess);
+                _CurPCB = currentProcess;
                 // Load the program to memory 
                 _MemoryManager.loadToMemory(codeList);
                 _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);

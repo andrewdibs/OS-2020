@@ -40,6 +40,7 @@ var _KernelBuffers = null;
 var _StdIn = null;
 var _StdOut = null;
 var _PCB = [];
+var _CurPCB;
 // Hardware (host)
 var _Memory;
 var _MemoryAccessor;

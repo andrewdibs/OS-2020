@@ -16,6 +16,7 @@ module TSOS {
     export class Cpu {
 
         constructor(public PC: number = 0,
+                    public IR: string = "",
                     public Acc: number = 0,
                     public Xreg: number = 0,
                     public Yreg: number = 0,
@@ -26,6 +27,7 @@ module TSOS {
 
         public init(): void {
             this.PC = 0;
+            this.IR = "";
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
@@ -46,6 +48,7 @@ module TSOS {
         }
 
         public executeOpCode(command){
+            this.IR = command;
             switch(command){
                 case "A9":
                     this.PC++;

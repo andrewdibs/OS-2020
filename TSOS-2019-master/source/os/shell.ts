@@ -309,6 +309,7 @@ module TSOS {
                 currentProcess.pid = _CurrentPID;
 
                 _PCB.push(currentProcess);
+                _CurPCB = currentProcess;
                 
                 // Load the program to memory 
                 _MemoryManager.loadToMemory(codeList);
