@@ -65,8 +65,8 @@ var TSOS;
             document.getElementById("pcbX").innerHTML = _CPU.Xreg.toString(16).toUpperCase();
             document.getElementById("pcbY").innerHTML = _CPU.Yreg.toString(16).toUpperCase();
             document.getElementById("pcbZ").innerHTML = _CPU.Zflag.toString(16).toUpperCase();
-            document.getElementById("pcbBase").innerHTML = _CPU.PC.toString(16).toUpperCase();
-            document.getElementById("pcbLimit").innerHTML = _CPU.PC.toString(16).toUpperCase();
+            document.getElementById("pcbBase").innerHTML = "0";
+            document.getElementById("pcbLimit").innerHTML = "256";
         };
         Utils.updateMemoryTable = function () {
             for (var i = 0; i < _Memory.locations.length; i++) {

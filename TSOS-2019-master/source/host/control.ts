@@ -131,5 +131,9 @@ module TSOS {
             }
             
         }
+
+        public static nextStep_click(btn): void{
+            _Step = true;
+        }
     }
 }

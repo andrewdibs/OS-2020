@@ -111,6 +111,9 @@ var TSOS;
                 document.getElementById("btnStep").disabled = true;
             }
         };
+        Control.nextStep_click = function (btn) {
+            _Step = true;
+        };
         return Control;
     }());
     TSOS.Control = Control;

@@ -45,6 +45,7 @@ var _CurPCB;
 var _Memory;
 var _MemoryAccessor;
 var _SingleStep = false;
+var _Step = false;
 // Software (OS)
 var _MemoryManager = null;
 // UI
