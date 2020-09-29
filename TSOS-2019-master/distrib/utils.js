@@ -51,7 +51,7 @@ var TSOS;
         };
         Utils.updateCPUgui = function () {
             document.getElementById("PC").innerHTML = _CPU.PC.toString(16).toUpperCase();
-            document.getElementById("IR").innerHTML = _CPU.IR.toUpperCase();
+            document.getElementById("IR").innerHTML = _CPU.IR.toString().toUpperCase();
             document.getElementById("ACC").innerHTML = _CPU.Acc.toString(16).toUpperCase();
             document.getElementById("X").innerHTML = _CPU.Xreg.toString(16).toUpperCase();
             document.getElementById("Y").innerHTML = _CPU.Yreg.toString(16).toUpperCase();
@@ -60,7 +60,7 @@ var TSOS;
         Utils.updatePCBgui = function () {
             document.getElementById("pcbPID").innerHTML = _CurrentPID.toString();
             document.getElementById("pcbPC").innerHTML = _CPU.PC.toString(16).toUpperCase();
-            document.getElementById("pcbIR").innerHTML = _CPU.IR.toUpperCase();
+            document.getElementById("pcbIR").innerHTML = _CPU.IR.toString().toUpperCase();
             document.getElementById("pcbACC").innerHTML = _CPU.Acc.toString(16).toUpperCase();
             document.getElementById("pcbX").innerHTML = _CPU.Xreg.toString(16).toUpperCase();
             document.getElementById("pcbY").innerHTML = _CPU.Yreg.toString(16).toUpperCase();

@@ -42,13 +42,14 @@ module TSOS {
             
             // get next op code based off the PC counter
             var command = _Memory.locations[this.PC];
+            this.IR = command;
+            TSOS.Utils.updateCPUgui();
             this.executeOpCode(command);
 
 
         }
 
         public executeOpCode(command){
-            this.IR = command;
             switch(command){
                 case "A9":
                     this.PC++;
@@ -89,6 +90,7 @@ module TSOS {
                     break;
                 case "EC":
                     // compare x reg with memory value and if equal : set zflag to 1
+                    console.log("yo");
                     this.compareXtoMemory();
                     break;
                 case "D0":
@@ -123,7 +125,7 @@ module TSOS {
             // find sta address and write acc to that location
             var location = parseInt(_MemoryManager.getLocation(this.PC),16);
             _MemoryManager.writeByte(location, parseInt(this.Acc.toString(),16));
-            this.PC++;
+            this.PC+=2;
             
         }
         // 6D // hmmm not sure if this is working correctly
@@ -157,7 +159,7 @@ module TSOS {
         public loadYregConst(){
             this.PC++;
             this.Yreg = parseInt(_MemoryManager.read(this.PC++),16);
-            console.log(this.Yreg);
+            
         }
         // AC
         public loadYregMemory(){
@@ -170,19 +172,22 @@ module TSOS {
         public compareXtoMemory(){
             this.PC++;
             var location = this.getAddress();
-            if(parseInt(_MemoryManager.read(location)) === this.Xreg){
+            if(parseInt(_MemoryManager.read(location),16) === this.Xreg){
                 this.Zflag = 1;
+
             }else{
                 this.Zflag = 0;
             }
-            this.PC++;
+            this.PC+=2;
         }
         // D0
         public branch(){
             this.PC++;
             if(this.Zflag === 0){
+                console.log("yerrr");
                 this.PC += parseInt(_MemoryManager.read(this.PC),16);
-                this.PC++; // + (this.PC % 256); possible wrap around not sure yet
+                this.PC++;
+                this.PC %=256;
             }
             else{
                 this.PC++;
