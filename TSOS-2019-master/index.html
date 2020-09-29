@@ -87,39 +87,124 @@
              onclick="TSOS.Control.singleStep_click(this);">
 
    </div>
-
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
-      <canvas id="display"
-              width="500px"
-              height="500px"
-              tabindex="3">
-      </canvas>
+   <div id="leftColumn" class="column">
+      <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
+         <canvas id="display"
+                 width="500px"
+                 height="500px"
+                 tabindex="3">
+         </canvas>
+      </div>
    </div>
-
-   <div id="divLog" style="margin-left:520px;">
-      <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="26"
-                   cols="48"
-         ></textarea>
-      </label>
+   
+   <div id="middleColumn" class="column">
+      <div id="divLog" style="margin-left:520px;">
+         <label>
+            Host Log
+            <br>
+            <textarea name="taHostLog"
+                      id  ="taHostLog"
+                      rows="26"
+                      cols="48"
+            ></textarea>
+         </label>
+      </div>
+   
+      <div id="divUserProgramInput" style="margin-left:520px;">
+         <label>
+            User Program Input
+            <br>
+            <textarea name="taProgramInput"
+                      id  ="taProgramInput"
+                      rows="8"
+                      cols="48"
+            >A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00</textarea>
+         </label>
+      </div>
+      
+   
+      </div>
+      <div id="CPU" style="margin-left:520px;">
+         <label>
+            CPU
+            <br>
+         </label>
+            <div id="CPUtable">
+               <table>
+                  <tr>
+                     <th>PC</th>
+                     <th>IR</th>
+                     <th>ACC</th>
+                     <th>X</th>
+                     <th>Y</th>
+                     <th>Z</th>
+                  </tr>
+                  <tr>
+                     <td id="PC">00</td>
+                     <td id="IR">00</td>
+                     <td id="ACC">00</td>
+                     <td id="X">00</td>
+                     <td id="Y">00</td>
+                     <td id="Z">0</td>
+                  </tr>
+               </table>
+            </div>  
+      </div>
+      <div id="Memory" style="margin-left: 520px;">
+         <label>
+            Memory
+            <br>
+         </label>
+            <div id="Memorytable">
+               <table>
+                  <td id="PC"></td>
+                  <td id="IR"></td>
+                  <td id="ACC"></td>
+                  <td id="X"></td>
+                  <td id="Y"></td>
+                  <td id="Z"></td>
+                  </tr>
+               </table>
+            </div>  
+      </div>
+      <div id="PCB" style="margin:4px;">
+         <label>
+            PCB
+            <br>
+         </label>
+            <div id="PCBtable">
+               <table>
+                  <tr>
+                     <th>PID</th>
+                     <th>PC</th>
+                     <th>IR</th>
+                     <th>ACC</th>
+                     <th>X</th>
+                     <th>Y</th>
+                     <th>Z</th>
+                     <th>Base</th>
+                     <th>Limit</th>
+                  </tr>
+                  <tr>
+                     <td id="pcbPID">00</td>
+                     <td id="pcbPC">00</td>
+                     <td id="pcbIR">00</td>
+                     <td id="pcbACC">00</td>
+                     <td id="pcbX">00</td>
+                     <td id="pcbY">00</td>
+                     <td id="pcbZ">0</td>
+                     <td id="pcbBase">00</td>
+                     <td id="pcbLimit">00</td>
+                  </tr>
+               </table>
+            </div>  
+      </div>
    </div>
+   
 
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         >A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00</textarea>
-      </label>
-   </div>
+   
 </div>
+
 
 <p class="footerText" style="clear:both;">
    <br>
@@ -129,9 +214,7 @@
    Ted Codd, Stevie Ray Vaughan, and Ian Fleming.
 </p>
    
-   <div id="divTaskBar">
-      <p> <span id="date"></span>      <span id="time"></span> <span id="smile"> :(</span></p>
-   </div>
+   
 
 </body>
 </html>
