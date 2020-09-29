@@ -38,9 +38,9 @@ module TSOS {
             let day = date.getDate();
             let year = date.getFullYear();
             let time = (date.getHours() % 12 || 12) + ":" + (date.getMinutes() < 10 ?"0":"") + date.getMinutes();
-            document.getElementById("date").innerHTML = month + "/" + day + "/" + year; 
-            document.getElementById("time").innerHTML = time;
-            document.getElementById("smile").innerHTML = " : )"
+            // document.getElementById("date").innerHTML = month + "/" + day + "/" + year; 
+            // document.getElementById("time").innerHTML = time;
+            // document.getElementById("smile").innerHTML = " : )"
         }
 
         //

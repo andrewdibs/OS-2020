@@ -59,21 +59,22 @@ module TSOS {
         }
 
         public static updatePCBgui(){
-            document.getElementById("pcbPID").innerHTML = _CPU.PC.toString(16).toUpperCase();
+            
+            document.getElementById("pcbPID").innerHTML = _CurrentPID.toString();
             document.getElementById("pcbPC").innerHTML = _CPU.PC.toString(16).toUpperCase();
             document.getElementById("pcbIR").innerHTML = _CPU.IR.toUpperCase();
             document.getElementById("pcbACC").innerHTML = _CPU.Acc.toString(16).toUpperCase();
             document.getElementById("pcbX").innerHTML = _CPU.Xreg.toString(16).toUpperCase();
             document.getElementById("pcbY").innerHTML = _CPU.Yreg.toString(16).toUpperCase();
             document.getElementById("pcbZ").innerHTML = _CPU.Zflag.toString(16).toUpperCase();
-            document.getElementById("pcbBase").innerHTML = _CPU.PC.toString(16).toUpperCase();
-            document.getElementById("pcbLimit").innerHTML = _CPU.PC.toString(16).toUpperCase();
+            document.getElementById("pcbBase").innerHTML = "0";
+            document.getElementById("pcbLimit").innerHTML = "256";
         }
 
         public static updateMemoryTable(){
-            console.log("lets go");
             for (var i = 0; i < _Memory.locations.length;i++){
-                document.getElementById("loc" + i).innerHTML = _Memory.locations[i];
+                if(_Memory.locations[i] != null)
+                    document.getElementById("loc" + i).innerHTML = _Memory.locations[i];
             }
         }
     }

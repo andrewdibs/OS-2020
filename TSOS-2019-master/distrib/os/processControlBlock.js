@@ -21,6 +21,17 @@ var TSOS;
             this.Acc = Acc;
             this.IR = IR;
         }
+        ProcessControlBlock.prototype.init = function () {
+            this.pid = 0;
+            this.PC = 0;
+            this.Xreg = 0;
+            this.Yreg = 0;
+            this.base = 0;
+            this.limit = 0;
+            this.Zflag = 0;
+            this.Acc = 0;
+            this.IR = "";
+        };
         return ProcessControlBlock;
     }());
     TSOS.ProcessControlBlock = ProcessControlBlock;
