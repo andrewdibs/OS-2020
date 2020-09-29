@@ -89,7 +89,6 @@ var TSOS;
                     break;
                 case "EC":
                     // compare x reg with memory value and if equal : set zflag to 1
-                    console.log("yo");
                     this.compareXtoMemory();
                     break;
                 case "D0":
@@ -121,7 +120,7 @@ var TSOS;
             this.PC++;
             // find sta address and write acc to that location
             var location = parseInt(_MemoryManager.getLocation(this.PC), 16);
-            _MemoryManager.writeByte(location, parseInt(this.Acc.toString(), 16));
+            _MemoryManager.writeByte(location, this.Acc.toString(16).toUpperCase());
             this.PC += 2;
         };
         // 6D // hmmm not sure if this is working correctly
@@ -133,10 +132,6 @@ var TSOS;
             // add to accumulator
             this.Acc += parseInt(_MemoryManager.read(location), 16);
             this.PC++;
-            console.log("location: " + location);
-            console.log("ACC " + this.Acc);
-            console.log("PC: " + this.PC);
-            console.log(parseInt(_MemoryManager.read(location), 16));
         };
         // A2
         Cpu.prototype.loadXregConst = function () {
@@ -178,7 +173,6 @@ var TSOS;
         Cpu.prototype.branch = function () {
             this.PC++;
             if (this.Zflag === 0) {
-                console.log("yerrr");
                 this.PC += parseInt(_MemoryManager.read(this.PC), 16);
                 this.PC++;
                 this.PC %= 256;
@@ -206,12 +200,11 @@ var TSOS;
                 var result = "";
                 for (var i = 0; i + this.Yreg < _Memory.locations.length; i++) {
                     var location = _Memory.locations[this.Yreg + i];
-                    console.log("location:" + location);
                     if (location == "00") {
                         break;
                     }
                     else {
-                        result += String.fromCharCode(location);
+                        result += String.fromCharCode(parseInt(location, 16));
                     }
                 }
                 console.log(params[0]);
