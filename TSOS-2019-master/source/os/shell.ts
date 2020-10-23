@@ -381,7 +381,7 @@ module TSOS {
         }
 
         public shellClearMem(args: string[]){
-
+            _MemoryManager.clearMemory();
         }
 
         public shellRunAll(args: string[]){
@@ -401,6 +401,14 @@ module TSOS {
         }
 
         public shellQuantum(args: string[]){
+            if (args[0] && !isNaN(parseInt(args[0]))){
+                _Quantum = Math.round(parseInt(args[0]));
+                _StdOut.putText("Quantum set to: " + _Quantum);
+            }
+            else{
+                _StdOut.putText("Error: please input a integer for quantum value.");
+            }
+            
             
         }
 

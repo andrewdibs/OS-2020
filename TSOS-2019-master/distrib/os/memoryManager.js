@@ -27,6 +27,11 @@ var TSOS;
         MemoryManager.prototype.read = function (address) {
             return _Memory.locations[address];
         };
+        MemoryManager.prototype.clearMemory = function () {
+            for (var i = 0; i < _Memory.locations.length; i++) {
+                _Memory.locations[i] = "00";
+            }
+        };
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;

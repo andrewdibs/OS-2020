@@ -286,6 +286,7 @@ var TSOS;
             }
         };
         Shell.prototype.shellClearMem = function (args) {
+            _MemoryManager.clearMemory();
         };
         Shell.prototype.shellRunAll = function (args) {
         };
@@ -296,6 +297,13 @@ var TSOS;
         Shell.prototype.shellKillAll = function (args) {
         };
         Shell.prototype.shellQuantum = function (args) {
+            if (args[0] && !isNaN(parseInt(args[0]))) {
+                _Quantum = Math.round(parseInt(args[0]));
+                _StdOut.putText("Quantum set to: " + _Quantum);
+            }
+            else {
+                _StdOut.putText("Error: please input a integer for quantum value.");
+            }
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {

@@ -33,6 +33,12 @@ module TSOS{
         return _Memory.locations[address];
       }
 
+      public clearMemory(): void{
+        for (var i = 0; i < _Memory.locations.length; i++){
+          _Memory.locations[i] = "00";
+        }
+      }
+
   }
 
 
