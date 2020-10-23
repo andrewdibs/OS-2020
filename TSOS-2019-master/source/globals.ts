@@ -55,11 +55,13 @@ var _PCB = [];
 var _CurPCB;
 // Hardware (host)
 var _Memory: TSOS.Memory;
+var _MemorySize = 768;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 var _SingleStep: boolean = false;
 var _Step: boolean = false;
 // Software (OS)
 var _MemoryManager: any = null;
+var _Quantum = 6;
 
 // UI
 var _Console: TSOS.Console;

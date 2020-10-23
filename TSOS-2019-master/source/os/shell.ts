@@ -107,13 +107,46 @@ module TSOS {
 
             // run
             sc = new ShellCommand(this.shellRun,
-                "run",
-                "<PID> - Runs the program assigned to the given PID.");
+                                  "run",
+                                  "<PID> - Runs the program assigned to the given PID.");
+            this.commandList[this.commandList.length] = sc;
+            
+            // runall 
+            sc = new ShellCommand(this.shellRunAll,
+                                  "runall",
+                                  "- Runs all running processes.");
             this.commandList[this.commandList.length] = sc;
             
             // ps  - list the running processes and their IDs
+            sc = new ShellCommand(this.shellPs,
+                                  "ps",
+                                  "- List the running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
+
             // kill <id> - kills the specified process id.
-            
+            sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "<id> - Kill the specified process id");
+            this.commandList[this.commandList.length] = sc;
+
+            // killall- kills all running processes.
+            sc = new ShellCommand(this.shellKillAll,
+                                  "killall",
+                                  "- Kills all running processes.");
+            this.commandList[this.commandList.length] = sc;
+
+            // clearmem - clears all memory partions
+            sc = new ShellCommand(this.shellClearMem,
+                                  "clearmem",
+                                  "- Clears all memory partions.");
+            this.commandList[this.commandList.length] = sc;
+
+            // quanum <int> - sets the quantum
+            sc = new ShellCommand(this.shellQuantum,
+                                  "quantum",
+                                  "<int> - Sets quantum to specified integer.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -347,6 +380,30 @@ module TSOS {
             }
         }
 
+        public shellClearMem(args: string[]){
+
+        }
+
+        public shellRunAll(args: string[]){
+            
+        }
+
+        public shellPs(args: string[]){
+            
+        }
+
+        public shellKill(args: string[]){
+            
+        }
+
+        public shellKillAll(args: string[]){
+            
+        }
+
+        public shellQuantum(args: string[]){
+            
+        }
+
         public shellMan(args: string[]) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -389,6 +446,24 @@ module TSOS {
                         break;
                     case "run":
                         _StdOut.putText("Runs the program specified by the PID argument given.");
+                        break;
+                    case "runAll":
+                        _StdOut.putText("Runs all processes loaded in memory.");
+                        break;
+                    case "clearmem":
+                        _StdOut.putText("Clears all memory partions for new program input.");
+                        break;
+                    case "kill":
+                        _StdOut.putText("Kills the process specified by the process ID.");
+                        break;
+                    case "killall":
+                        _StdOut.putText("Kills all running processes.");
+                        break;
+                    case "ps":
+                        _StdOut.putText("Displays the PID and state of all processes.");
+                        break;
+                    case "quantum":
+                        _StdOut.putText("Sets the current quantum for round robin scheduling based of the integer parameter.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

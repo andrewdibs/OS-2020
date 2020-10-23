@@ -43,11 +43,13 @@ var _PCB = [];
 var _CurPCB;
 // Hardware (host)
 var _Memory;
+var _MemorySize = 768;
 var _MemoryAccessor;
 var _SingleStep = false;
 var _Step = false;
 // Software (OS)
 var _MemoryManager = null;
+var _Quantum = 6;
 // UI
 var _Console;
 var _OsShell;

@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     var Memory = /** @class */ (function () {
         function Memory(locations) {
-            if (locations === void 0) { locations = new Array(255); }
+            if (locations === void 0) { locations = new Array(_MemorySize); }
             this.locations = locations;
         }
         // initialize memory to 0s

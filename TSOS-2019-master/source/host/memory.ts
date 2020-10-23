@@ -1,7 +1,7 @@
 module TSOS{
 
   export class Memory{
-      constructor(public locations = new Array(255)){
+      constructor(public locations = new Array(_MemorySize)){
 
       }
       // initialize memory to 0s
