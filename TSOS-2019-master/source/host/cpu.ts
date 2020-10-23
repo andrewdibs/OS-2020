@@ -135,7 +135,7 @@ module TSOS {
             var location = this.getAddress();
             // add to accumulator
             this.Acc += parseInt(_MemoryManager.read(location), 16);
-            this.PC++;
+            this.PC += 2;
         }
         // A2
         public loadXregConst(){

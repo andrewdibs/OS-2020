@@ -19,6 +19,7 @@ module TSOS{
         return false;
       }
 
+      
       public getLocation(address): String{
         return _Memory.locations[address];
       }
@@ -31,7 +32,6 @@ module TSOS{
       public read(address): String{
         return _Memory.locations[address];
       }
-
 
   }
 
