@@ -68,6 +68,20 @@ var TSOS;
             document.getElementById("pcbBase").innerHTML = "0";
             document.getElementById("pcbLimit").innerHTML = "256";
         };
+        Utils.createMemoryTable = function () {
+            var html = "<table style='width: 100%;'><tbody>";
+            for (var i = 0; i < _MemorySize; i++) {
+                if (i % 8 == 0) {
+                    html += "<tr><td>0x0" + i.toString(16).toUpperCase() + "</td>";
+                }
+                html += "<td id=\"loc" + i + "\">00</td>";
+                if (i % 8 == 7) {
+                    html += "</tr>";
+                }
+            }
+            html += "</tbody></table>";
+            document.getElementById("Memorytable").innerHTML = html;
+        };
         Utils.updateMemoryTable = function () {
             for (var i = 0; i < _Memory.locations.length; i++) {
                 if (_Memory.locations[i] != null)
