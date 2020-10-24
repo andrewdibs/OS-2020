@@ -1,7 +1,7 @@
 var TSOS;
 (function (TSOS) {
     var ProcessControlBlock = /** @class */ (function () {
-        function ProcessControlBlock(pid, PC, Xreg, Yreg, base, limit, Zflag, Acc, IR) {
+        function ProcessControlBlock(pid, PC, Xreg, Yreg, base, limit, Zflag, Acc, IR, state) {
             if (pid === void 0) { pid = 0; }
             if (PC === void 0) { PC = 0; }
             if (Xreg === void 0) { Xreg = 0; }
@@ -11,6 +11,7 @@ var TSOS;
             if (Zflag === void 0) { Zflag = 0; }
             if (Acc === void 0) { Acc = 0; }
             if (IR === void 0) { IR = ""; }
+            if (state === void 0) { state = "Ready"; }
             this.pid = pid;
             this.PC = PC;
             this.Xreg = Xreg;
@@ -20,6 +21,7 @@ var TSOS;
             this.Zflag = Zflag;
             this.Acc = Acc;
             this.IR = IR;
+            this.state = state;
         }
         ProcessControlBlock.prototype.init = function () {
             this.pid = 0;
@@ -31,6 +33,10 @@ var TSOS;
             this.Zflag = 0;
             this.Acc = 0;
             this.IR = "";
+            this.state = "Ready";
+        };
+        ProcessControlBlock.prototype.getPID = function () {
+            return this.pid.toString();
         };
         return ProcessControlBlock;
     }());

@@ -9,7 +9,8 @@ module TSOS{
                   public limit = 0,
                   public Zflag = 0,
                   public Acc = 0,
-                  public IR = ""){
+                  public IR = "",
+                  public state = "Ready"){
  
       }
       public init(): void{
@@ -22,8 +23,12 @@ module TSOS{
         this.Zflag = 0;
         this.Acc = 0;
         this.IR = "";
+        this.state = "Ready";
       }
       
+      public getPID(): String{
+        return this.pid.toString();
+      }
   }
   
 

@@ -386,7 +386,11 @@ module TSOS {
         }
 
         public shellPs(args: string[]){
-            
+            for (var i = 0; i < _PCB.length;i++){
+                _StdOut.putText("PID " + _PCB[i].pid + ": " + _PCB[i].state);
+                _StdOut.advanceLine();
+
+            }
         }
 
         public shellKill(args: string[]){

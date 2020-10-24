@@ -290,6 +290,10 @@ var TSOS;
         Shell.prototype.shellRunAll = function (args) {
         };
         Shell.prototype.shellPs = function (args) {
+            for (var i = 0; i < _PCB.length; i++) {
+                _StdOut.putText("PID " + _PCB[i].pid + ": " + _PCB[i].state);
+                _StdOut.advanceLine();
+            }
         };
         Shell.prototype.shellKill = function (args) {
         };
