@@ -9,28 +9,37 @@ module TSOS{
       }
       
 
-      public loadToMemory(program): void {
+      public loadToMemory(program): void{
 
         // find open segment
         for (var i = 0; i < this.segmentStatus.length;i++){
           if (this.segmentStatus[i]){
             var base = i * _SegmentSize;
             var limit = base + _SegmentSize;
-            console.log("base : " + base);
             
+            // assign program to proper memory segment
             for (var j = base; j < program.length + base; j++){
               _Memory.locations[j] = program[j-base];
-              console.log(j);
             }
-
+            // set segment to false since it is now taken
             this.segmentStatus[i] = false;
+
+            // Create PCB and add to PCB list 
+            var currentProcess = new ProcessControlBlock();
+            currentProcess.pid = _CurrentPID;
+            currentProcess.base = base;
+            currentProcess.limit = limit;
+            _CurPCB = currentProcess;
+            _PCB.push(_CurPCB);
+
+            _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
+            _CurrentPID++;
             return;
           }
         }
 
         // else no memory segments available
         _StdOut.putText("No memory segments available for use. Please clear memory using clearmem command.");
-        
         
       }
 
@@ -42,19 +51,6 @@ module TSOS{
       }
 
       
-      public getLocation(address): String{
-        return _Memory.locations[address];
-      }
-
-      public writeByte(address, value): void{
-        if (value.length === 1) value = "0" + value;
-        _Memory.locations[address] = value;
-      }
-
-      public read(address): String{
-        return _Memory.locations[address];
-      }
-
       public clearMemory(): void{
         for (var i = 0; i < _Memory.locations.length; i++){
           _Memory.locations[i] = "00";

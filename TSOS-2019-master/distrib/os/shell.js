@@ -250,20 +250,8 @@ var TSOS;
             if (args[0])
                 priority = parseInt(args[0]);
             if (regex.test(program) && !isNaN(priority)) { // load program
-                _StdOut.putText("Program Valid. Command run <id> to execute.");
-                // TODO :check for available space in memory
-                // if space is available
-                // if(){}
-                // Create PCB and add to PCB list 
-                var currentProcess = new TSOS.ProcessControlBlock();
-                currentProcess.pid = _CurrentPID;
-                _CurPCB = currentProcess;
-                _PCB.push(_CurPCB);
                 // Load the program to memory 
                 _MemoryManager.loadToMemory(codeList);
-                _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
-                _CurrentPID++;
-                // TODO: update Tables accordingly
             }
             else {
                 _StdOut.putText("Invalid hex Program or priority id number..");

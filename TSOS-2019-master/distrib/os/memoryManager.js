@@ -10,12 +10,21 @@ var TSOS;
                 if (this.segmentStatus[i]) {
                     var base = i * _SegmentSize;
                     var limit = base + _SegmentSize;
-                    console.log("base : " + base);
+                    // assign program to proper memory segment
                     for (var j = base; j < program.length + base; j++) {
                         _Memory.locations[j] = program[j - base];
-                        console.log(j);
                     }
+                    // set segment to false since it is now taken
                     this.segmentStatus[i] = false;
+                    // Create PCB and add to PCB list 
+                    var currentProcess = new TSOS.ProcessControlBlock();
+                    currentProcess.pid = _CurrentPID;
+                    currentProcess.base = base;
+                    currentProcess.limit = limit;
+                    _CurPCB = currentProcess;
+                    _PCB.push(_CurPCB);
+                    _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
+                    _CurrentPID++;
                     return;
                 }
             }
@@ -29,17 +38,6 @@ var TSOS;
                     return true;
             }
             return false;
-        };
-        MemoryManager.prototype.getLocation = function (address) {
-            return _Memory.locations[address];
-        };
-        MemoryManager.prototype.writeByte = function (address, value) {
-            if (value.length === 1)
-                value = "0" + value;
-            _Memory.locations[address] = value;
-        };
-        MemoryManager.prototype.read = function (address) {
-            return _Memory.locations[address];
         };
         MemoryManager.prototype.clearMemory = function () {
             for (var i = 0; i < _Memory.locations.length; i++) {
