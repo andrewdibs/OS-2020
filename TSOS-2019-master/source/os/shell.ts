@@ -98,6 +98,12 @@ module TSOS {
                                   "fortune",
                                   "- Tells you a fortune.")
             this.commandList[this.commandList.length] = sc;
+
+            // status <string> - sets the status to the specified string
+            sc = new ShellCommand(this.shellStatus,
+                                  "status",
+                                  "<string> - sets the status to the specified string");
+            this.commandList[this.commandList.length] = sc;
             
             // load
             sc = new ShellCommand(this.shellLoad,
@@ -380,6 +386,15 @@ module TSOS {
             }
         }
 
+        public shellStatus(args: string[]){
+            if (args[0]){
+                _Status = args[0];
+            }
+            else{
+                _StdOut.putText("Please enter a status message.");
+            }
+        }
+
         public shellClearMem(args: string[]){
             _MemoryManager.clearMemory();
         }
@@ -472,6 +487,9 @@ module TSOS {
                         break;
                     case "quantum":
                         _StdOut.putText("Sets the current quantum for round robin scheduling based of the integer parameter.");
+                        break;
+                    case "status":
+                        _StdOut.putText("Sets the status of the OS");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

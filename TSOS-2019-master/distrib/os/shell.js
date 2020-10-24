@@ -57,6 +57,9 @@ var TSOS;
             // fortune
             sc = new TSOS.ShellCommand(this.shellFortune, "fortune", "- Tells you a fortune.");
             this.commandList[this.commandList.length] = sc;
+            // status <string> - sets the status to the specified string
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - sets the status to the specified string");
+            this.commandList[this.commandList.length] = sc;
             // load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads the program in Program input.");
             this.commandList[this.commandList.length] = sc;
@@ -285,6 +288,14 @@ var TSOS;
                 _StdOut.putText("Input a process id - run <PID>");
             }
         };
+        Shell.prototype.shellStatus = function (args) {
+            if (args[0]) {
+                _Status = args[0];
+            }
+            else {
+                _StdOut.putText("Please enter a status message.");
+            }
+        };
         Shell.prototype.shellClearMem = function (args) {
             _MemoryManager.clearMemory();
         };
@@ -365,6 +376,9 @@ var TSOS;
                         break;
                     case "quantum":
                         _StdOut.putText("Sets the current quantum for round robin scheduling based of the integer parameter.");
+                        break;
+                    case "status":
+                        _StdOut.putText("Sets the status of the OS");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
