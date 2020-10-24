@@ -26,9 +26,6 @@ module TSOS{
         this.state = "Ready";
       }
       
-      public getPID(): String{
-        return this.pid.toString();
-      }
   }
   
 
