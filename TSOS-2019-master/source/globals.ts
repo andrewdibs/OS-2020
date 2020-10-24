@@ -32,7 +32,7 @@ var _OSclock: number = 0;  // Page 23.
 var _CurrentPID = 0;       // sets the PID globally so it is not reused
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 
-var _Status: string = "dibsos"
+var _Status: string = "on"
 var _Canvas: HTMLCanvasElement;          // Initialized in Control.hostInit().
 var _DrawingContext: any;                // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.
 var _DefaultFontFamily: string = "sans"; // Ignored, I think. The was just a place-holder in 2008, but the HTML canvas may have use for it.
@@ -56,6 +56,7 @@ var _CurPCB;
 // Hardware (host)
 var _Memory: TSOS.Memory;
 var _MemorySize = 768;
+var _SegmentSize = 256;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 var _SingleStep: boolean = false;
 var _Step: boolean = false;

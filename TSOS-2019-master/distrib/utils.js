@@ -48,6 +48,7 @@ var TSOS;
             this.updateCPUgui();
             this.updatePCBgui();
             this.updateMemoryTable();
+            document.getElementById("status").innerHTML = _Status;
         };
         Utils.updateCPUgui = function () {
             document.getElementById("PC").innerHTML = _CPU.PC.toString(16).toUpperCase();
@@ -72,7 +73,7 @@ var TSOS;
             var html = "<table style='width: 100%;'><tbody>";
             for (var i = 0; i < _MemorySize; i++) {
                 if (i % 8 == 0) {
-                    html += "<tr><td>0x0" + i.toString(16).toUpperCase() + "</td>";
+                    html += "<tr><td>0x" + i.toString(16).toUpperCase() + "</td>";
                 }
                 html += "<td id=\"loc" + i + "\">00</td>";
                 if (i % 8 == 7) {

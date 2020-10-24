@@ -2,11 +2,25 @@ var TSOS;
 (function (TSOS) {
     var MemoryManager = /** @class */ (function () {
         function MemoryManager() {
+            this.segmentStatus = [true, true, true];
         }
         MemoryManager.prototype.loadToMemory = function (program) {
-            for (var i = 0; i < program.length; i++) {
-                _Memory.locations[i] = program[i];
+            // find open segment
+            for (var i = 0; i < this.segmentStatus.length; i++) {
+                if (this.segmentStatus[i]) {
+                    var base = i * _SegmentSize;
+                    var limit = base + _SegmentSize;
+                    console.log("base : " + base);
+                    for (var j = base; j < program.length + base; j++) {
+                        _Memory.locations[j] = program[j - base];
+                        console.log(j);
+                    }
+                    this.segmentStatus[i] = false;
+                    return;
+                }
             }
+            // else no memory segments available
+            _StdOut.putText("No memory segments available for use. Please clear memory using clearmem command.");
         };
         MemoryManager.prototype.isValidPCB = function (pid) {
             for (var _i = 0, _PCB_1 = _PCB; _i < _PCB_1.length; _i++) {
