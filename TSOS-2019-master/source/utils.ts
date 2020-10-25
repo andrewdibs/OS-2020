@@ -62,12 +62,12 @@ module TSOS {
         public static updatePCBgui(){
             
             document.getElementById("pcbPID").innerHTML = _CurrentPID.toString();
-            document.getElementById("pcbPC").innerHTML = _CPU.PC.toString(16).toUpperCase();
-            document.getElementById("pcbIR").innerHTML = _CPU.IR.toString().toUpperCase();
-            document.getElementById("pcbACC").innerHTML = _CPU.Acc.toString(16).toUpperCase();
-            document.getElementById("pcbX").innerHTML = _CPU.Xreg.toString(16).toUpperCase();
-            document.getElementById("pcbY").innerHTML = _CPU.Yreg.toString(16).toUpperCase();
-            document.getElementById("pcbZ").innerHTML = _CPU.Zflag.toString(16).toUpperCase();
+            document.getElementById("pcbPC").innerHTML = _CurPCB.PC.toString(16).toUpperCase();
+            document.getElementById("pcbIR").innerHTML = _CurPCB.IR.toString().toUpperCase();
+            document.getElementById("pcbACC").innerHTML = _CurPCB.Acc.toString(16).toUpperCase();
+            document.getElementById("pcbX").innerHTML = _CurPCB.Xreg.toString(16).toUpperCase();
+            document.getElementById("pcbY").innerHTML = _CurPCB.Yreg.toString(16).toUpperCase();
+            document.getElementById("pcbZ").innerHTML = _CurPCB.Zflag.toString(16).toUpperCase();
             document.getElementById("pcbBase").innerHTML = "0";
             document.getElementById("pcbLimit").innerHTML = "256";
         }

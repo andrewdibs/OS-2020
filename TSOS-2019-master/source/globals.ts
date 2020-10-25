@@ -62,6 +62,7 @@ var _SingleStep: boolean = false;
 var _Step: boolean = false;
 // Software (OS)
 var _MemoryManager: any = null;
+var Scheduler: TSOS.Scheduler;
 var _Quantum = 6;
 
 // UI

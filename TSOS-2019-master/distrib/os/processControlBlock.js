@@ -35,9 +35,6 @@ var TSOS;
             this.IR = "";
             this.state = "Ready";
         };
-        ProcessControlBlock.prototype.getPID = function () {
-            return this.pid.toString();
-        };
         return ProcessControlBlock;
     }());
     TSOS.ProcessControlBlock = ProcessControlBlock;

@@ -52,6 +52,14 @@ table, td, th{
   padding: 6px;
 }
 
+#Memorytable{
+  height: 200px;
+  width : 500px;
+  overflow-y: scroll;
+}
+
+
+
 #divTaskBar{
   position: fixed;
   border: 1px solid black;

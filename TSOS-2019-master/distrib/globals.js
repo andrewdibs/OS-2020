@@ -51,6 +51,7 @@ var _SingleStep = false;
 var _Step = false;
 // Software (OS)
 var _MemoryManager = null;
+var Scheduler;
 var _Quantum = 6;
 // UI
 var _Console;
