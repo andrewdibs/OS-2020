@@ -142,7 +142,13 @@ module TSOS {
                 case SYSTEM_CALL:
                     _StdOut.putText(params[0]);
                     break;
-                
+                case EXECUTED_IRQ:
+                    _Scheduler.terminate(params[0]);
+                    _StdOut.advanceLine();
+                    _StdOut.putText("PID: " + params[0] + " complete.");
+                    _StdOut.advanceLine();
+                    _OsShell.putPrompt();
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

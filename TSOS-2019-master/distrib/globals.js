@@ -17,6 +17,7 @@ var TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt prior
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
 var SYSTEM_CALL = 2;
+var EXECUTED_IRQ = 3;
 //
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
@@ -40,7 +41,7 @@ var _KernelBuffers = null;
 // Standard input and output
 var _StdIn = null;
 var _StdOut = null;
-var _PCB = [];
+var _ResidentList = [];
 var _CurPCB;
 // Hardware (host)
 var _Memory;

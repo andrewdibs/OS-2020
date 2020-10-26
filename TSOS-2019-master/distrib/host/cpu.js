@@ -13,7 +13,7 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = /** @class */ (function () {
-        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting) {
+        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting, curPid) {
             if (PC === void 0) { PC = 0; }
             if (IR === void 0) { IR = ""; }
             if (Acc === void 0) { Acc = 0; }
@@ -21,6 +21,7 @@ var TSOS;
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
             if (isExecuting === void 0) { isExecuting = false; }
+            if (curPid === void 0) { curPid = 0; }
             this.PC = PC;
             this.IR = IR;
             this.Acc = Acc;
@@ -28,6 +29,7 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
+            this.curPid = curPid;
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -84,8 +86,7 @@ var TSOS;
                     break;
                 case "00":
                     // break
-                    console.log("00");
-                    this.isExecuting = false;
+                    this.finish();
                     break;
                 case "EC":
                     // compare x reg with memory value and if equal : set zflag to 1
@@ -207,11 +208,19 @@ var TSOS;
                         result += String.fromCharCode(parseInt(location, 16));
                     }
                 }
-                console.log(params[0]);
                 params.push(result);
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL, params));
             }
             this.PC++;
+        };
+        // 00
+        Cpu.prototype.finish = function () {
+            var params = [];
+            params.push(this.curPid);
+            console.log("00");
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTED_IRQ, params));
+            console.log(_KernelInterruptQueue.toString());
+            this.isExecuting = false;
         };
         Cpu.prototype.getAddress = function () {
             return parseInt(_MemoryAccessor.read(this.PC + 1).toString() + _MemoryAccessor.read(this.PC).toString(), 16);

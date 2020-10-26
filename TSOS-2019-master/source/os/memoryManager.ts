@@ -29,10 +29,10 @@ module TSOS{
             currentProcess.pid = _CurrentPID;
             currentProcess.base = base;
             currentProcess.limit = limit;
+            currentProcess.state = "Resident";
             _CurPCB = currentProcess;
             _ResidentList.push(_CurPCB);
-            // load process to scheduler
-            _Scheduler.loadToScheduler(currentProcess);
+            
 
             _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
             _CurrentPID++;
@@ -57,6 +57,7 @@ module TSOS{
         for (var i = 0; i < _Memory.locations.length; i++){
           _Memory.locations[i] = "00";
         }
+        this.segmentStatus = [true, true, true];
       }
 
       public clearSegment(index){

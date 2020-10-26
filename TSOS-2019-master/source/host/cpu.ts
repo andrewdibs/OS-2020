@@ -21,7 +21,8 @@ module TSOS {
                     public Xreg: number = 0,
                     public Yreg: number = 0,
                     public Zflag: number = 0,
-                    public isExecuting: boolean = false) {
+                    public isExecuting: boolean = false,
+                    public curPid: number = 0) {
 
         }
 
@@ -85,8 +86,7 @@ module TSOS {
                     break;
                 case "00":
                     // break
-                    console.log("00");
-                    this.isExecuting = false;
+                    this.finish();
                     break;
                 case "EC":
                     // compare x reg with memory value and if equal : set zflag to 1
@@ -214,12 +214,21 @@ module TSOS {
                         result += String.fromCharCode(parseInt(location, 16));
                     }
                 }
-                console.log(params[0]);
                 params.push(result)
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL,params));
             }
 
             this.PC++;
+        }
+
+        // 00
+        public finish(){
+            var params = [];
+            params.push(this.curPid);
+            console.log("00");
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTED_IRQ,params));
+            console.log(_KernelInterruptQueue.toString());
+            this.isExecuting = false;
         }
 
 

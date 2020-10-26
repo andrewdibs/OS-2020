@@ -21,9 +21,9 @@ var TSOS;
                     currentProcess.pid = _CurrentPID;
                     currentProcess.base = base;
                     currentProcess.limit = limit;
+                    currentProcess.state = "Resident";
                     _CurPCB = currentProcess;
-                    _PCB.push(_CurPCB);
-                    _Scheduler.loadToScheduler(currentProcess.pid);
+                    _ResidentList.push(_CurPCB);
                     _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                     _CurrentPID++;
                     return;
@@ -33,8 +33,8 @@ var TSOS;
             _StdOut.putText("No memory segments available for use. Please clear memory using clearmem command.");
         };
         MemoryManager.prototype.isValidPCB = function (pid) {
-            for (var _i = 0, _PCB_1 = _PCB; _i < _PCB_1.length; _i++) {
-                var pcb = _PCB_1[_i];
+            for (var _i = 0, _ResidentList_1 = _ResidentList; _i < _ResidentList_1.length; _i++) {
+                var pcb = _ResidentList_1[_i];
                 if (pcb.pid == pid)
                     return true;
             }
@@ -44,6 +44,9 @@ var TSOS;
             for (var i = 0; i < _Memory.locations.length; i++) {
                 _Memory.locations[i] = "00";
             }
+            this.segmentStatus = [true, true, true];
+        };
+        MemoryManager.prototype.clearSegment = function (index) {
         };
         return MemoryManager;
     }());

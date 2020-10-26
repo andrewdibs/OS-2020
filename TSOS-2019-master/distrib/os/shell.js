@@ -265,6 +265,7 @@ var TSOS;
                 if (!isNaN(parseInt(id))) {
                     // if pcb is in pcb list then execute program
                     if (_MemoryManager.isValidPCB(id)) {
+                        _Scheduler.loadToScheduler(id);
                         _CPU.isExecuting = true;
                         _StdOut.putText("Running PID: " + id);
                         return;
@@ -290,8 +291,8 @@ var TSOS;
         Shell.prototype.shellRunAll = function (args) {
         };
         Shell.prototype.shellPs = function (args) {
-            for (var i = 0; i < _PCB.length; i++) {
-                _StdOut.putText("PID " + _PCB[i].pid + ": " + _PCB[i].state);
+            for (var i = 0; i < _ResidentList.length; i++) {
+                _StdOut.putText("PID " + _ResidentList[i].pid + ": " + _ResidentList[i].state);
                 _StdOut.advanceLine();
             }
         };
