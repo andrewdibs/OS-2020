@@ -1,8 +1,7 @@
 module TSOS {
   export class Scheduler{
-      constructor(public readyQueue = new TSOS.Queue()
-                  
-                  ) {
+      constructor(public readyQueue = new TSOS.Queue(),
+                  public rrCounter = 0) {
       }
 
        
@@ -20,6 +19,15 @@ module TSOS {
           _CPU.limit = process.limit;
           _CPU.isExecuting = true;
 
+        }
+      }
+
+      public contextSwitch(id){
+        var curProcess = this.getProcess(id);
+        if (curProcess.state === "Ready"){
+          this.rrCounter = 0;
+          curProcess.state = "Running";
+          this.loadToCPU(curProcess);
         }
       }
 
@@ -42,7 +50,7 @@ module TSOS {
 
       public terminate(pid){
         var process = this.getProcess(pid);
-        process.state = "terminated";
+        process.state = "Terminated";
 
       }
 

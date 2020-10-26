@@ -266,7 +266,6 @@ var TSOS;
                     // if pcb is in pcb list then execute program
                     if (_MemoryManager.isValidPCB(id)) {
                         _Scheduler.loadToScheduler(id);
-                        _CPU.isExecuting = true;
                         _StdOut.putText("Running PID: " + id);
                         return;
                     }

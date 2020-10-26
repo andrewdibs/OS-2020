@@ -13,7 +13,7 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = /** @class */ (function () {
-        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting, curPid) {
+        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting, curPid, base, limit) {
             if (PC === void 0) { PC = 0; }
             if (IR === void 0) { IR = ""; }
             if (Acc === void 0) { Acc = 0; }
@@ -22,6 +22,8 @@ var TSOS;
             if (Zflag === void 0) { Zflag = 0; }
             if (isExecuting === void 0) { isExecuting = false; }
             if (curPid === void 0) { curPid = 0; }
+            if (base === void 0) { base = 0; }
+            if (limit === void 0) { limit = 0; }
             this.PC = PC;
             this.IR = IR;
             this.Acc = Acc;
@@ -30,6 +32,8 @@ var TSOS;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
             this.curPid = curPid;
+            this.base = base;
+            this.limit = limit;
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -38,6 +42,9 @@ var TSOS;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
+            this.base = 0;
+            this.limit = 0;
+            this.curPid = 0;
             this.isExecuting = false;
         };
         Cpu.prototype.cycle = function () {
