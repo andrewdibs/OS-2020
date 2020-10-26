@@ -31,6 +31,7 @@ module TSOS{
             currentProcess.limit = limit;
             _CurPCB = currentProcess;
             _PCB.push(_CurPCB);
+            _Scheduler.loadToScheduler(currentProcess.pid);
 
             _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
             _CurrentPID++;

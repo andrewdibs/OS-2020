@@ -46,7 +46,8 @@ module TSOS {
 
         public static updateGUI(){
             this.updateCPUgui();
-            this.updatePCBgui();
+          //  if (!_Scheduler.readyQueue.isEmpty())
+            //    this.updatePCBgui();
             this.updateMemoryTable();
             document.getElementById("status").innerHTML = _Status;
         }
@@ -61,15 +62,16 @@ module TSOS {
 
         public static updatePCBgui(){
             
-            document.getElementById("pcbPID").innerHTML = _CurrentPID.toString();
+            document.getElementById("pcbPID").innerHTML = _CurPCB.pid.toString();
             document.getElementById("pcbPC").innerHTML = _CurPCB.PC.toString(16).toUpperCase();
             document.getElementById("pcbIR").innerHTML = _CurPCB.IR.toString().toUpperCase();
             document.getElementById("pcbACC").innerHTML = _CurPCB.Acc.toString(16).toUpperCase();
             document.getElementById("pcbX").innerHTML = _CurPCB.Xreg.toString(16).toUpperCase();
             document.getElementById("pcbY").innerHTML = _CurPCB.Yreg.toString(16).toUpperCase();
             document.getElementById("pcbZ").innerHTML = _CurPCB.Zflag.toString(16).toUpperCase();
-            document.getElementById("pcbBase").innerHTML = "0";
-            document.getElementById("pcbLimit").innerHTML = "256";
+            document.getElementById("pcbBase").innerHTML = _CurPCB.base.toString();
+            document.getElementById("pcbLimit").innerHTML = _CurPCB.limit.toString();
+            document.getElementById("pcbState").innerHTML = _CurPCB.state.toString().toUpperCase();
         }
 
         public static createMemoryTable(){
