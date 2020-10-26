@@ -337,7 +337,6 @@ module TSOS {
             if (args[0])
                 priority = parseInt(args[0]);
             if (regex.test(program) && !isNaN(priority)){ // load program
-        
                 // Load the program to memory 
                 _MemoryManager.loadToMemory(codeList)
 

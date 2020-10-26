@@ -22,7 +22,9 @@ module TSOS {
                     public Yreg: number = 0,
                     public Zflag: number = 0,
                     public isExecuting: boolean = false,
-                    public curPid: number = 0) {
+                    public curPid: number = 0,
+                    public base: number = 0,
+                    public limit: number = 0) {
 
         }
 
@@ -33,6 +35,9 @@ module TSOS {
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
+            this.base = 0;
+            this.limit = 0;
+            this.curPid = 0;
             this.isExecuting = false;
         }
 
