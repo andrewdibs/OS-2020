@@ -30,8 +30,9 @@ module TSOS{
             currentProcess.base = base;
             currentProcess.limit = limit;
             _CurPCB = currentProcess;
-            _PCB.push(_CurPCB);
-            _Scheduler.loadToScheduler(currentProcess.pid);
+            _ResidentList.push(_CurPCB);
+            // load process to scheduler
+            _Scheduler.loadToScheduler(currentProcess);
 
             _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
             _CurrentPID++;
@@ -45,7 +46,7 @@ module TSOS{
       }
 
       public isValidPCB(pid): boolean{
-        for(var pcb of _PCB){
+        for(var pcb of _ResidentList){
           if(pcb.pid == pid)return true;
         }
         return false;
@@ -56,6 +57,10 @@ module TSOS{
         for (var i = 0; i < _Memory.locations.length; i++){
           _Memory.locations[i] = "00";
         }
+      }
+
+      public clearSegment(index){
+
       }
 
   }

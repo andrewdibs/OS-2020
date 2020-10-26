@@ -51,7 +51,7 @@ var _KernelBuffers = null;
 var _StdIn:  TSOS.Console = null; 
 var _StdOut: TSOS.Console = null;
 
-var _PCB = [];
+var _ResidentList = [];
 var _CurPCB;
 // Hardware (host)
 var _Memory: TSOS.Memory;

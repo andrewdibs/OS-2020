@@ -1,6 +1,7 @@
 module TSOS {
   export class Scheduler{
-      constructor(public readyQueue = new TSOS.Queue()
+      constructor(public readyQueue = new TSOS.Queue(),
+                  public residentList = []
                   ) {
       }
 
@@ -13,9 +14,9 @@ module TSOS {
       }
 
       public loadToScheduler(process): void{
-        this.readyQueue.enqueue(process);
-        console.log("proccess id : " + process);
-        console.log("ready queue: " + this.readyQueue.toString());
+        this.residentList.push(process);
+        this.readyQueue.enqueue(process.pid);
+        
 
         
       }
