@@ -243,7 +243,7 @@ module TSOS {
             params.push(this.curPid);
             console.log("00");
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTED_IRQ,params));
-            console.log(_KernelInterruptQueue.toString());
+            
             this.isExecuting = false;
         }
 

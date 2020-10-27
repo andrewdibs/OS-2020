@@ -381,7 +381,11 @@ module TSOS {
         }
 
         public shellRunAll(args: string[]){
-            
+            for (var i = 0; i < _ResidentList.length;i++){
+                if(_ResidentList[i].state == "Resident"){
+                    _Scheduler.loadToScheduler(_ResidentList[i].pid);
+                }          
+            }
         }
 
         public shellPs(args: string[]){
