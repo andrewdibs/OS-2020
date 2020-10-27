@@ -397,11 +397,20 @@ module TSOS {
         }
 
         public shellKill(args: string[]){
-            
+            if (args[0] && _MemoryManager.isValidPCB(args[0])){
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TERMINATE_IRQ,args));
+            }
+            else{
+                _StdOut.putText("Please enter a valid PID.");
+            }
         }
 
         public shellKillAll(args: string[]){
-            
+            for (var i = 0; i < _ResidentList.length; i++){
+              
+                    _OsShell.shellKill(_ResidentList[i].pid);
+       
+            }
         }
 
         public shellQuantum(args: string[]){

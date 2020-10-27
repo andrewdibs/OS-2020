@@ -288,6 +288,11 @@ var TSOS;
             _MemoryManager.clearMemory();
         };
         Shell.prototype.shellRunAll = function (args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
+                if (_ResidentList[i].state == "Resident") {
+                    _Scheduler.loadToScheduler(_ResidentList[i].pid);
+                }
+            }
         };
         Shell.prototype.shellPs = function (args) {
             for (var i = 0; i < _ResidentList.length; i++) {
@@ -296,8 +301,19 @@ var TSOS;
             }
         };
         Shell.prototype.shellKill = function (args) {
+            if (args[0] && _MemoryManager.isValidPCB(args[0])) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TERMINATE_IRQ, args));
+            }
+            else {
+                _StdOut.putText("Please enter a valid PID.");
+            }
         };
         Shell.prototype.shellKillAll = function (args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
+                //  if (_ResidentList[i].state === "Ready" || _ResidentList[i].state === "Running"){
+                _OsShell.shellKill(_ResidentList[i].pid.toString());
+                //}
+            }
         };
         Shell.prototype.shellQuantum = function (args) {
             if (args[0] && !isNaN(parseInt(args[0]))) {

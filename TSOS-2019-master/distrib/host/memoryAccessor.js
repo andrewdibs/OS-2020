@@ -4,7 +4,7 @@ var TSOS;
         function MemoryAccessor() {
         }
         MemoryAccessor.prototype.read = function (address) {
-            return _Memory.locations[address + _CPU.base];
+            return _Memory.locations[address];
         };
         MemoryAccessor.prototype.getLocation = function (address) {
             return _Memory.locations[address];

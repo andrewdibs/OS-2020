@@ -139,6 +139,12 @@ var TSOS;
                 case SWITCH_IRQ:
                     _Scheduler.contextSwitch(params[0]);
                     break;
+                case TERMINATE_IRQ:
+                    _Scheduler.terminate(params[0]);
+                    _StdOut.putText("PID: " + params[0] + "killed.");
+                    _StdOut.advanceLine();
+                    _OsShell.putPrompt();
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

@@ -20,6 +20,7 @@ var SYSTEM_CALL = 2;
 var EXECUTED_IRQ = 3;
 var EXECUTE_IRQ = 4;
 var SWITCH_IRQ = 5;
+var TERMINATE_IRQ = 6;
 //
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
