@@ -63,10 +63,11 @@ var TSOS;
             var html = "";
             for (var i = 0; i < _ResidentList.length; i++) {
                 var process = _ResidentList[i];
-                //if (process.state === "Ready" || process.state === "Running"){
-                html += "<tr><td>" + process.pid + "</td><td>" + process.PC + "</td><td>" + process.IR + "</td><td>" + process.Acc + "</td>\n                    <td>" + process.Xreg + "</td><td>" + process.Yreg + "</td><td>" + process.Zflag + "</td><td>" + process.base + "</td><td>" + process.limit + "</td>\n                    <td>" + process.state + "</td>";
-                //}
+                if (process.state === "Ready" || process.state === "Running") {
+                    html += "<tr><td>" + process.pid + "</td><td>" + process.PC + "</td><td>" + process.IR + "</td><td>" + process.Acc + "</td>\n                    <td>" + process.Xreg + "</td><td>" + process.Yreg + "</td><td>" + process.Zflag + "</td><td>" + process.base + "</td><td>" + process.limit + "</td>\n                    <td>" + process.state + "</td>";
+                }
             }
+            document.getElementById("readyqueue").innerHTML = html;
         };
         Utils.createMemoryTable = function () {
             var html = "<table style='width: 100%;'><tbody>";
