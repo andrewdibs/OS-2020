@@ -310,9 +310,7 @@ var TSOS;
         };
         Shell.prototype.shellKillAll = function (args) {
             for (var i = 0; i < _ResidentList.length; i++) {
-                //  if (_ResidentList[i].state === "Ready" || _ResidentList[i].state === "Running"){
-                _OsShell.shellKill(_ResidentList[i].pid.toString());
-                //}
+                _OsShell.shellKill(_ResidentList[i].pid);
             }
         };
         Shell.prototype.shellQuantum = function (args) {
