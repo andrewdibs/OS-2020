@@ -46,8 +46,8 @@ var TSOS;
         };
         Utils.updateGUI = function () {
             this.updateCPUgui();
-            //  if (!_Scheduler.readyQueue.isEmpty())
-            //    this.updatePCBgui();
+            if (!_Scheduler.readyQueue.isEmpty())
+                this.updatePCBgui();
             this.updateMemoryTable();
             document.getElementById("status").innerHTML = _Status;
         };
@@ -60,16 +60,13 @@ var TSOS;
             document.getElementById("Z").innerHTML = _CPU.Zflag.toString(16).toUpperCase();
         };
         Utils.updatePCBgui = function () {
-            document.getElementById("pcbPID").innerHTML = _CurPCB.pid.toString();
-            document.getElementById("pcbPC").innerHTML = _CurPCB.PC.toString(16).toUpperCase();
-            document.getElementById("pcbIR").innerHTML = _CurPCB.IR.toString().toUpperCase();
-            document.getElementById("pcbACC").innerHTML = _CurPCB.Acc.toString(16).toUpperCase();
-            document.getElementById("pcbX").innerHTML = _CurPCB.Xreg.toString(16).toUpperCase();
-            document.getElementById("pcbY").innerHTML = _CurPCB.Yreg.toString(16).toUpperCase();
-            document.getElementById("pcbZ").innerHTML = _CurPCB.Zflag.toString(16).toUpperCase();
-            document.getElementById("pcbBase").innerHTML = _CurPCB.base.toString();
-            document.getElementById("pcbLimit").innerHTML = _CurPCB.limit.toString();
-            document.getElementById("pcbState").innerHTML = _CurPCB.state.toString().toUpperCase();
+            var html = "";
+            for (var i = 0; i < _ResidentList.length; i++) {
+                var process = _ResidentList[i];
+                //if (process.state === "Ready" || process.state === "Running"){
+                html += "<tr><td>" + process.pid + "</td><td>" + process.PC + "</td><td>" + process.IR + "</td><td>" + process.Acc + "</td>\n                    <td>" + process.Xreg + "</td><td>" + process.Yreg + "</td><td>" + process.Zflag + "</td><td>" + process.base + "</td><td>" + process.limit + "</td>\n                    <td>" + process.state + "</td>";
+                //}
+            }
         };
         Utils.createMemoryTable = function () {
             var html = "<table style='width: 100%;'><tbody>";
