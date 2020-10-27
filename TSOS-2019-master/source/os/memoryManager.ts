@@ -30,8 +30,7 @@ module TSOS{
             currentProcess.base = base;
             currentProcess.limit = limit;
             currentProcess.state = "Resident";
-            _CurPCB = currentProcess;
-            _ResidentList.push(_CurPCB);
+            _ResidentList.push(currentProcess);
             
 
             _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);

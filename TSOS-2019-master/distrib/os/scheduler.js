@@ -22,22 +22,58 @@ var TSOS;
             }
         };
         Scheduler.prototype.contextSwitch = function (id) {
-            var curProcess = this.getProcess(id);
-            if (curProcess.state === "Ready") {
-                this.rrCounter = 0;
-                curProcess.state = "Running";
+            var nextID = this.readyQueue.peek();
+            var curProcess = this.getProcess(nextID);
+            if (curProcess !== null) {
+                if (curProcess.state === "Ready") {
+                    this.rrCounter = 0;
+                    curProcess.state = "Running";
+                }
+                if (id === -1) {
+                    console.log("start executing");
+                }
+                else {
+                    console.log("contextSwitch");
+                }
                 this.loadToCPU(curProcess);
+            }
+            else {
+                _CPU.isExecuting = false;
             }
         };
         Scheduler.prototype.loadToScheduler = function (process) {
             // load process id to ready queue
             this.readyQueue.enqueue(process);
         };
+        Scheduler.prototype.makeDecision = function () {
+            if (_CPU.isExecuting) {
+                this.roundRobin();
+            }
+            else {
+                if (!this.readyQueue.isEmpty()) {
+                    _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTE_IRQ, [-1]));
+                }
+            }
+        };
+        Scheduler.prototype.roundRobin = function () {
+            this.rrCounter++;
+            var curProcess = -1;
+            if (_Quantum < this.rrCounter) {
+                this.rrCounter = 0;
+                if (!this.readyQueue.isEmpty()) {
+                    if (this.readyQueue.getSize() > 1) {
+                        curProcess = this.readyQueue.dequeue();
+                        this.loadToScheduler(curProcess);
+                    }
+                    _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
+                    console.log("context switch");
+                }
+            }
+        };
         Scheduler.prototype.getProcess = function (pid) {
             // if pid is in resident list return process
             for (var i = 0; i < _ResidentList.length; i++) {
-                if (pid === _ResidentList[i].pid) {
-                    console.log(_ResidentList[i].pid);
+                if (pid == _ResidentList[i].pid) {
                     return _ResidentList[i];
                 }
             }

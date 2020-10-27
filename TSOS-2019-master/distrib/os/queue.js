@@ -30,6 +30,15 @@ var TSOS;
             }
             return retVal;
         };
+        Queue.prototype.peek = function () {
+            if (!this.isEmpty()) {
+                var retVal = this.q[0];
+                return retVal;
+            }
+            else {
+                return null;
+            }
+        };
         Queue.prototype.toString = function () {
             var retVal = "";
             for (var i in this.q) {

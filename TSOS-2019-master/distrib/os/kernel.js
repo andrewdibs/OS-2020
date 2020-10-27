@@ -68,6 +68,8 @@ var TSOS;
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
                that it has to look for interrupts and process them if it finds any.
             */
+            // call the scheduler to check if any processes have been added to ready queue
+            _Scheduler.makeDecision();
             // Check for an interrupt, if there are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
@@ -130,6 +132,12 @@ var TSOS;
                     _StdOut.putText("PID: " + params[0] + " complete.");
                     _StdOut.advanceLine();
                     _OsShell.putPrompt();
+                    break;
+                case EXECUTE_IRQ:
+                    _Scheduler.contextSwitch(params[0]);
+                    break;
+                case SWITCH_IRQ:
+                    _Scheduler.contextSwitch(params[0]);
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

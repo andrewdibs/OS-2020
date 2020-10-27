@@ -21,6 +21,8 @@ const TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (inte
 const KEYBOARD_IRQ: number = 1;
 const SYSTEM_CALL: number = 2;
 const EXECUTED_IRQ: number = 3;
+const EXECUTE_IRQ: number = 4;
+const SWITCH_IRQ: number = 5;
 
 
 //
