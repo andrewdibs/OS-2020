@@ -83,6 +83,7 @@ var TSOS;
         Scheduler.prototype.terminate = function (pid) {
             var process = this.getProcess(pid);
             process.state = "Terminated";
+            this.readyQueue.dequeue();
         };
         return Scheduler;
     }());

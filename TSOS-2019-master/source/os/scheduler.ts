@@ -88,6 +88,7 @@ module TSOS {
       public terminate(pid){
         var process = this.getProcess(pid);
         process.state = "Terminated";
+        this.readyQueue.dequeue();
 
       }
 

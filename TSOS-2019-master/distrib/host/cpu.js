@@ -56,6 +56,14 @@ var TSOS;
             this.IR = command;
             TSOS.Utils.updateCPUgui();
             this.executeOpCode(command);
+            var pcb = _Scheduler.getProcess(this.curPid);
+            // store information back to the current pcb
+            pcb.PC = this.PC;
+            pcb.IR = this.IR;
+            pcb.Acc = this.Acc;
+            pcb.Xreg = this.Xreg;
+            pcb.Yreg = this.Yreg;
+            pcb.Zflag = this.Zflag;
         };
         Cpu.prototype.executeOpCode = function (command) {
             switch (command) {
