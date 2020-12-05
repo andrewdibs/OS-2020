@@ -152,7 +152,54 @@ module TSOS {
                                   "quantum",
                                   "<int> - Sets quantum to specified integer.");
             this.commandList[this.commandList.length] = sc;
+            
+            // create <filename> - creates a new file
+            sc = new ShellCommand(this.shellCreate,
+                                  "create",
+                                  "<filename> - Creates the specified filename.");
+            this.commandList[this.commandList.length] = sc;
 
+            // write <filename> <"string">- Writes data string to specified file name 
+            sc = new ShellCommand(this.shellWrite,
+                                  "write",
+                                  "<filename> <data> - Creates the specified filename.");
+            this.commandList[this.commandList.length] = sc;
+
+            // read <filename> - reads the requested file name 
+            sc = new ShellCommand(this.shellRead,
+                                  "read",
+                                  "<filename> - Reads the specified filename.");
+            this.commandList[this.commandList.length] = sc;
+
+            // delete <filename> - deletes the requested file name 
+            sc = new ShellCommand(this.shellDelete,
+                                  "delete",
+                                  "<filename> - Deletes the specified filename.");
+            this.commandList[this.commandList.length] = sc;
+
+            // format - formats the disk drive
+            sc = new ShellCommand(this.shellFormat,
+                                  "format",
+                                  " - Formats the disk.");
+            this.commandList[this.commandList.length] = sc;
+
+            // ls - lists files on disk
+            sc = new ShellCommand(this.shellLs,
+                                  "ls",
+                                  " - Lists files on disk.");
+            this.commandList[this.commandList.length] = sc;
+
+            // setschedule <[rr, fcfs, priority]>- sets scheduling algorithm 
+            sc = new ShellCommand(this.shellSetSchedule,
+                                  "setschedule",
+                                  "<[rr, fcfs, priority]> - Sets scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
+
+            // getschedule - sets scheduling algorithm 
+            sc = new ShellCommand(this.shellGetSchedule,
+                                  "getschedule",
+                                  "- Gets the current scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -420,9 +467,41 @@ module TSOS {
             else{
                 _StdOut.putText("Error: please input a integer for quantum value.");
             }
-            
+        }
+
+        public shellCreate(args: string[]){
+
+        }
+
+        public shellRead(args: string[]){
             
         }
+
+        public shellWrite(args: string[]){
+            
+        }
+
+        public shellDelete(args: string[]){
+            
+        }
+
+        public shellFormat(){
+            
+        }
+
+        public shellSetSchedule(args: string[]){
+            
+        }
+
+        public shellGetSchedule(){
+            
+        }
+
+        public shellLs(args: string[]){
+            
+        }
+
+        
 
         public shellMan(args: string[]) {
             if (args.length > 0) {
@@ -487,6 +566,30 @@ module TSOS {
                         break;
                     case "status":
                         _StdOut.putText("Sets the status of the OS");
+                        break;
+                    case "create":
+                        _StdOut.putText("Create the filename provided on disk.");
+                        break;
+                    case "read":
+                        _StdOut.putText("Displays the contents of filename provided.");
+                        break;
+                    case "write":
+                        _StdOut.putText("Writes string to the provided filename.");
+                        break;
+                    case "delete":
+                        _StdOut.putText("Deletes the filename provided in arguments.");
+                        break;
+                    case "format":
+                        _StdOut.putText("Initilizes all blocks in all sectors in all tracks.");
+                        break;
+                    case "ls":
+                        _StdOut.putText("Lists all files currently on disc.");
+                        break;
+                    case "setschedule":
+                        _StdOut.putText("Sets the schedule algorithm [rr, fcfs, priority].");
+                        break;
+                    case "getschedule":
+                        _StdOut.putText("Displays the current scheduling algorithm.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
