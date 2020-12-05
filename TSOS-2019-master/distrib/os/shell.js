@@ -72,11 +72,11 @@ var TSOS;
             // ps  - list the running processes and their IDs
             sc = new TSOS.ShellCommand(this.shellPs, "ps", "- List the running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
-            // kill <id> - kills the specified process id.
-            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<id> - Kill the specified process id");
-            this.commandList[this.commandList.length] = sc;
             // killall- kills all running processes.
             sc = new TSOS.ShellCommand(this.shellKillAll, "killall", "- Kills all running processes.");
+            this.commandList[this.commandList.length] = sc;
+            // kill <id> - kills the specified process id.
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<id> - Kill the specified process id");
             this.commandList[this.commandList.length] = sc;
             // clearmem - clears all memory partions
             sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clears all memory partions.");
@@ -309,9 +309,9 @@ var TSOS;
                 _StdOut.putText("Please enter a valid PID.");
             }
         };
-        Shell.prototype.shellKillAll = function (args) {
+        Shell.prototype.shellKillAll = function () {
             for (var i = 0; i < _ResidentList.length; i++) {
-                _OsShell.shellKill(_ResidentList[i].pid);
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TERMINATE_IRQ, [i]));
             }
         };
         Shell.prototype.shellQuantum = function (args) {

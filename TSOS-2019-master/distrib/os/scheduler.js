@@ -25,12 +25,14 @@ var TSOS;
         Scheduler.prototype.contextSwitch = function (id) {
             var nextID = this.readyQueue.peek();
             var curProcess = this.getProcess(nextID);
+            if (curProcess.state == "Terminated") {
+                this.readyQueue.dequeue();
+                return;
+            }
             if (curProcess !== null) {
                 if (curProcess.state === "Ready") {
                     this.rrCounter = 0;
-                    console.log("hello");
                     curProcess.state = "Running";
-                    //TSOS.Utils.updatePCBgui();
                 }
                 this.loadToCPU(curProcess);
             }
@@ -63,8 +65,11 @@ var TSOS;
                         curProcess = this.readyQueue.dequeue();
                         this.loadToScheduler(curProcess);
                     }
-                    var next = this.getProcess(curProcess);
-                    next.state = "Ready";
+                    // change the state of the process back to ready
+                    if (curProcess > -1) {
+                        var next = this.getProcess(curProcess);
+                        next.state = "Ready";
+                    }
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
                 }
             }
@@ -83,7 +88,6 @@ var TSOS;
         Scheduler.prototype.terminate = function (pid) {
             var process = this.getProcess(pid);
             process.state = "Terminated";
-            this.readyQueue.dequeue();
             _CPU.isExecuting = false;
         };
         return Scheduler;

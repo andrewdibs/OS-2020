@@ -129,16 +129,16 @@ module TSOS {
                                   "- List the running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
 
+            // killall- kills all running processes.
+            sc = new ShellCommand(this.shellKillAll,
+                "killall",
+                "- Kills all running processes.");
+            this.commandList[this.commandList.length] = sc;
+
             // kill <id> - kills the specified process id.
             sc = new ShellCommand(this.shellKill,
                                   "kill",
                                   "<id> - Kill the specified process id");
-            this.commandList[this.commandList.length] = sc;
-
-            // killall- kills all running processes.
-            sc = new ShellCommand(this.shellKillAll,
-                                  "killall",
-                                  "- Kills all running processes.");
             this.commandList[this.commandList.length] = sc;
 
             // clearmem - clears all memory partions
@@ -406,10 +406,9 @@ module TSOS {
             }
         }
 
-        public shellKillAll(args: string[]){
+        public shellKillAll(){
             for (var i = 0; i < _ResidentList.length; i++){
-              
-                    _OsShell.shellKill(_ResidentList[i].pid);
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TERMINATE_IRQ,[i]));
             }
         }
 

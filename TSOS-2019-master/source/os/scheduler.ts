@@ -26,21 +26,21 @@ module TSOS {
       public contextSwitch(id){
         var nextID = this.readyQueue.peek();   
         var curProcess = this.getProcess(nextID);
+        if (curProcess.state == "Terminated"){
+          this.readyQueue.dequeue();
+          return;
+        }
         
         if (curProcess !== null){
           if (curProcess.state === "Ready"){
             this.rrCounter = 0;
-            console.log("hello");
             curProcess.state = "Running";
-            //TSOS.Utils.updatePCBgui();
           }
           this.loadToCPU(curProcess);
         }
         else{
           _CPU.isExecuting = false;
-        }
-        
-        
+        }   
       }
 
       public loadToScheduler(process): void{
@@ -98,7 +98,6 @@ module TSOS {
       public terminate(pid){
         var process = this.getProcess(pid);
         process.state = "Terminated";
-        this.readyQueue.dequeue();
         _CPU.isExecuting = false;
 
       }
