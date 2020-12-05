@@ -28,10 +28,9 @@ var TSOS;
             if (curProcess !== null) {
                 if (curProcess.state === "Ready") {
                     this.rrCounter = 0;
+                    console.log("hello");
                     curProcess.state = "Running";
-                }
-                if (id === -1) {
-                    console.log("start executing");
+                    //TSOS.Utils.updatePCBgui();
                 }
                 this.loadToCPU(curProcess);
             }
@@ -52,21 +51,24 @@ var TSOS;
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTE_IRQ, [-1]));
                 }
             }
+            TSOS.Utils.updatePCBgui();
         };
         Scheduler.prototype.roundRobin = function () {
             console.log(this.rrCounter);
-            this.rrCounter++;
             var curProcess = -1;
-            if (_Quantum < this.rrCounter + 1) {
+            if (_Quantum < this.rrCounter) {
                 this.rrCounter = 0;
                 if (!this.readyQueue.isEmpty()) {
                     if (this.readyQueue.getSize() > 1) {
                         curProcess = this.readyQueue.dequeue();
                         this.loadToScheduler(curProcess);
                     }
+                    var next = this.getProcess(curProcess);
+                    next.state = "Ready";
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
                 }
             }
+            this.rrCounter++;
         };
         Scheduler.prototype.getProcess = function (pid) {
             // if pid is in resident list return process

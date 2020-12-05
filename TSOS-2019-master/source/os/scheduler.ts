@@ -30,10 +30,9 @@ module TSOS {
         if (curProcess !== null){
           if (curProcess.state === "Ready"){
             this.rrCounter = 0;
+            console.log("hello");
             curProcess.state = "Running";
-          }
-          if (id === -1 ){
-            console.log("start executing")
+            //TSOS.Utils.updatePCBgui();
           }
           this.loadToCPU(curProcess);
         }
@@ -41,11 +40,13 @@ module TSOS {
           _CPU.isExecuting = false;
         }
         
+        
       }
 
       public loadToScheduler(process): void{
         // load process id to ready queue
         this.readyQueue.enqueue(process);
+        
       }
 
       public makeDecision(){
@@ -56,24 +57,31 @@ module TSOS {
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTE_IRQ, [-1]));
           }
         }
+        TSOS.Utils.updatePCBgui();
       }
 
       public roundRobin(){
         console.log(this.rrCounter);
-        this.rrCounter++; 
+         
         var curProcess = -1;
-        if (_Quantum < this.rrCounter + 1 ){
+        if (_Quantum < this.rrCounter){
           this.rrCounter = 0;
           if (!this.readyQueue.isEmpty()){
             if (this.readyQueue.getSize() > 1){
               curProcess = this.readyQueue.dequeue();
               this.loadToScheduler(curProcess);
             }
+            // change the state of the process back to ready
+            if(curProcess > -1 ){
+              var next = this.getProcess(curProcess);
+              next.state = "Ready";
+            }
+            
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
             
           }
         }
-        
+        this.rrCounter++;
       }
 
       public getProcess(pid){
