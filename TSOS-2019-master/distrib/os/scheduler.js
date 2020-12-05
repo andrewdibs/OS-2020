@@ -19,6 +19,7 @@ var TSOS;
                 _CPU.base = process.base;
                 _CPU.limit = process.limit;
                 _CPU.isExecuting = true;
+                console.log(_CPU.base);
             }
         };
         Scheduler.prototype.contextSwitch = function (id) {
@@ -31,9 +32,6 @@ var TSOS;
                 }
                 if (id === -1) {
                     console.log("start executing");
-                }
-                else {
-                    console.log("contextSwitch");
                 }
                 this.loadToCPU(curProcess);
             }
@@ -56,9 +54,10 @@ var TSOS;
             }
         };
         Scheduler.prototype.roundRobin = function () {
+            console.log(this.rrCounter);
             this.rrCounter++;
             var curProcess = -1;
-            if (_Quantum < this.rrCounter) {
+            if (_Quantum < this.rrCounter + 1) {
                 this.rrCounter = 0;
                 if (!this.readyQueue.isEmpty()) {
                     if (this.readyQueue.getSize() > 1) {
@@ -66,7 +65,6 @@ var TSOS;
                         this.loadToScheduler(curProcess);
                     }
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
-                    console.log("context switch");
                 }
             }
         };
@@ -84,6 +82,7 @@ var TSOS;
             var process = this.getProcess(pid);
             process.state = "Terminated";
             this.readyQueue.dequeue();
+            _CPU.isExecuting = false;
         };
         return Scheduler;
     }());

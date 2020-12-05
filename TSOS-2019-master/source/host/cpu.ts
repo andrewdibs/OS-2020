@@ -45,9 +45,8 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            
             // get next op code based off the PC counter
-            var command = _Memory.locations[this.PC];
+            var command = _Memory.locations[this.base + this.PC];
             this.IR = command;
             TSOS.Utils.updateCPUgui();
             this.executeOpCode(command);
@@ -62,15 +61,13 @@ module TSOS {
             pcb.Yreg = this.Yreg;
             pcb.Zflag = this.Zflag;
 
-
-
         }
 
         public executeOpCode(command){
             switch(command){
                 case "A9":
                     this.PC++;
-                    this.Acc = parseInt(_Memory.locations[this.PC++],16);
+                    this.Acc = parseInt(_Memory.locations[this.base + this.PC++],16);
                     break;
                 case "AD": 
                     this.loadAcc();
@@ -99,6 +96,7 @@ module TSOS {
                     break;
                 case "EA":
                     // do nothing
+                    this.PC++;
                     break;
                 case "00":
                     // break
@@ -129,8 +127,8 @@ module TSOS {
         public loadAcc(){
             // load the accumulator with data from memory address
             this.PC++;
-            var location = parseInt(_MemoryAccessor.read(this.PC + 1).toString() + _MemoryAccessor.read(this.PC++).toString(),16);
-            this.Acc = parseInt(_MemoryAccessor.read(location).toString(),16);
+            var location = parseInt(_MemoryAccessor.read(this.base, this.PC + 1).toString() + _MemoryAccessor.read(this.base, this.PC++).toString(),16);
+            this.Acc = parseInt(_MemoryAccessor.read(this.base, location).toString(),16);
             this.PC++;
 
         }
@@ -138,8 +136,8 @@ module TSOS {
         public storeAcc(){
             this.PC++;
             // find sta address and write acc to that location
-            var location = parseInt(_MemoryAccessor.getLocation(this.PC).toString(),16);
-            _MemoryAccessor.writeByte(location, this.Acc.toString(16).toUpperCase());
+            var location = parseInt(_MemoryAccessor.getLocation(this.base, this.PC).toString(),16);
+            _MemoryAccessor.writeByte(this.base, location, this.Acc.toString(16).toUpperCase());
             this.PC+=2;
             
         }
@@ -150,40 +148,40 @@ module TSOS {
             // read next two bytes
             var location = this.getAddress();
             // add to accumulator
-            this.Acc += parseInt(_MemoryAccessor.read(location).toString(), 16);
+            this.Acc += parseInt(_MemoryAccessor.read(this.base, location).toString(), 16);
             this.PC += 2;
         }
         // A2
         public loadXregConst(){
             this.PC++;
-            this.Xreg = parseInt(_MemoryAccessor.read(this.PC++).toString(),16); 
+            this.Xreg = parseInt(_MemoryAccessor.read(this.base, this.PC++).toString(),16); 
         }
         // AE
         public loadXregMemory(){
             this.PC++;
             var location = this.getAddress();
-            this.Xreg = parseInt(_MemoryAccessor.read(location).toString(),16);
+            this.Xreg = parseInt(_MemoryAccessor.read(this.base, location).toString(),16);
             this.PC += 2;
             
         }
         // A0
         public loadYregConst(){
             this.PC++;
-            this.Yreg = parseInt(_MemoryAccessor.read(this.PC++).toString(),16);
+            this.Yreg = parseInt(_MemoryAccessor.read(this.base, this.PC++).toString(),16);
             
         }
         // AC
         public loadYregMemory(){
             this.PC++;
             var location = this.getAddress();
-            this.Yreg = parseInt(_MemoryAccessor.read(location).toString(),16);
+            this.Yreg = parseInt(_MemoryAccessor.read(this.base, location).toString(),16);
             this.PC += 2;
         }
         // EC
         public compareXtoMemory(){
             this.PC++;
             var location = this.getAddress();
-            if(parseInt(_MemoryAccessor.read(location).toString(),16) === this.Xreg){
+            if(parseInt(_MemoryAccessor.read(this.base, location).toString(),16) === this.Xreg){
                 this.Zflag = 1;
 
             }else{
@@ -195,9 +193,10 @@ module TSOS {
         public branch(){
             this.PC++;
             if(this.Zflag === 0){
-                this.PC += parseInt(_MemoryAccessor.read(this.PC).toString(),16);
+                this.PC += parseInt(_MemoryAccessor.read(this.base, this.PC).toString(),16);
                 this.PC++;
-                this.PC %=256;
+                if (this.PC > 256)
+                    this.PC %= 256;
             }
             else{
                 this.PC++;
@@ -207,10 +206,10 @@ module TSOS {
         public increment(){
             this.PC++;
             var location = this.getAddress();
-            _MemoryAccessor.writeByte(location, parseInt(_MemoryAccessor.read(location).toString(),16) + 1);
+            _MemoryAccessor.writeByte(this.base,location, parseInt(_MemoryAccessor.read(this.base, location).toString(),16) + 1);
             this.PC += 2;
         }
-        // FF
+        // FF 
         public systemCall(){
             // if the x register = 1 print y register integer
             var params = [];
@@ -222,7 +221,7 @@ module TSOS {
             if (this.Xreg === 2){
                 var result = "";
                 for (var i = 0; i + this.Yreg < _Memory.locations.length; i++){
-                    var location = _Memory.locations[this.Yreg + i];
+                    var location = _Memory.locations[this.base + this.Yreg + i];
                     if (location == "00"){
                         break;
                     }
@@ -249,7 +248,7 @@ module TSOS {
 
 
         public getAddress(){
-            return parseInt(_MemoryAccessor.read(this.PC + 1).toString() + _MemoryAccessor.read(this.PC).toString(),16);
+            return parseInt(_MemoryAccessor.read(this.base, this.PC + 1).toString() + _MemoryAccessor.read(this.base, this.PC).toString(),16);
         }
 
     }

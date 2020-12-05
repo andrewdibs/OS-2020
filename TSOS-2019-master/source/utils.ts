@@ -61,18 +61,32 @@ module TSOS {
         }
 
         public static updatePCBgui(){
-            var html = "";
+            this.clearReadyQ();
+            let pcbTable = document.getElementById("PCBtable");
+            let body = document.createElement('tbody');
+            body.innerHTML = "<tr><th>PID</th><th>PC</th><th>IR</th><th>ACC</th><th>X</th><th>Y</th><th>Z</th><th>Base</th><th>Limit</th><th>State</th> </tr>";
             for (var i = 0; i < _ResidentList.length; i++){
-                var process = _ResidentList[i];
-                if (process.state === "Ready" || process.state === "Running"){
-                    html += `<tr><td>${process.pid}</td><td>${process.PC}</td><td>${process.IR}</td><td>${process.Acc}</td>
-                    <td>${process.Xreg}</td><td>${process.Yreg}</td><td>${process.Zflag}</td><td>${process.base}</td><td>${process.limit}</td>
-                    <td>${process.state}</td>`
+                if(_ResidentList[i].state != "Terminated"){
+                    var row = body.insertRow(-1);
+                    row.insertCell(-1).innerHTML = _ResidentList[i].pid;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].PC.toString(16).toUpperCase();
+                    row.insertCell(-1).innerHTML = _ResidentList[i].IR;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].Acc.toString(16).toUpperCase();
+                    row.insertCell(-1).innerHTML = _ResidentList[i].Xreg.toString(16).toUpperCase();
+                    row.insertCell(-1).innerHTML = _ResidentList[i].Yreg.toString(16).toUpperCase();
+                    row.insertCell(-1).innerHTML = _ResidentList[i].Zflag;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].base;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].limit;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].state;
                 }
-                
+    
             }
-            document.getElementById("readyqueue").innerHTML = html;
+            pcbTable.appendChild(body);
             
+        }
+        public static clearReadyQ(){
+            let table = document.getElementById("PCBtable");
+            table.innerHTML = "";
         }
 
         public static createMemoryTable(){

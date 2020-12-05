@@ -52,7 +52,7 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // get next op code based off the PC counter
-            var command = _Memory.locations[this.PC];
+            var command = _Memory.locations[this.base + this.PC];
             this.IR = command;
             TSOS.Utils.updateCPUgui();
             this.executeOpCode(command);
@@ -69,7 +69,7 @@ var TSOS;
             switch (command) {
                 case "A9":
                     this.PC++;
-                    this.Acc = parseInt(_Memory.locations[this.PC++], 16);
+                    this.Acc = parseInt(_Memory.locations[this.base + this.PC++], 16);
                     break;
                 case "AD":
                     this.loadAcc();
@@ -98,6 +98,7 @@ var TSOS;
                     break;
                 case "EA":
                     // do nothing
+                    this.PC++;
                     break;
                 case "00":
                     // break
@@ -127,16 +128,16 @@ var TSOS;
         Cpu.prototype.loadAcc = function () {
             // load the accumulator with data from memory address
             this.PC++;
-            var location = parseInt(_MemoryAccessor.read(this.PC + 1).toString() + _MemoryAccessor.read(this.PC++).toString(), 16);
-            this.Acc = parseInt(_MemoryAccessor.read(location).toString(), 16);
+            var location = parseInt(_MemoryAccessor.read(this.base, this.PC + 1).toString() + _MemoryAccessor.read(this.base, this.PC++).toString(), 16);
+            this.Acc = parseInt(_MemoryAccessor.read(this.base, location).toString(), 16);
             this.PC++;
         };
         //AD
         Cpu.prototype.storeAcc = function () {
             this.PC++;
             // find sta address and write acc to that location
-            var location = parseInt(_MemoryAccessor.getLocation(this.PC).toString(), 16);
-            _MemoryAccessor.writeByte(location, this.Acc.toString(16).toUpperCase());
+            var location = parseInt(_MemoryAccessor.getLocation(this.base, this.PC).toString(), 16);
+            _MemoryAccessor.writeByte(this.base, location, this.Acc.toString(16).toUpperCase());
             this.PC += 2;
         };
         // 6D // hmmm not sure if this is working correctly
@@ -146,38 +147,38 @@ var TSOS;
             // read next two bytes
             var location = this.getAddress();
             // add to accumulator
-            this.Acc += parseInt(_MemoryAccessor.read(location).toString(), 16);
+            this.Acc += parseInt(_MemoryAccessor.read(this.base, location).toString(), 16);
             this.PC += 2;
         };
         // A2
         Cpu.prototype.loadXregConst = function () {
             this.PC++;
-            this.Xreg = parseInt(_MemoryAccessor.read(this.PC++).toString(), 16);
+            this.Xreg = parseInt(_MemoryAccessor.read(this.base, this.PC++).toString(), 16);
         };
         // AE
         Cpu.prototype.loadXregMemory = function () {
             this.PC++;
             var location = this.getAddress();
-            this.Xreg = parseInt(_MemoryAccessor.read(location).toString(), 16);
+            this.Xreg = parseInt(_MemoryAccessor.read(this.base, location).toString(), 16);
             this.PC += 2;
         };
         // A0
         Cpu.prototype.loadYregConst = function () {
             this.PC++;
-            this.Yreg = parseInt(_MemoryAccessor.read(this.PC++).toString(), 16);
+            this.Yreg = parseInt(_MemoryAccessor.read(this.base, this.PC++).toString(), 16);
         };
         // AC
         Cpu.prototype.loadYregMemory = function () {
             this.PC++;
             var location = this.getAddress();
-            this.Yreg = parseInt(_MemoryAccessor.read(location).toString(), 16);
+            this.Yreg = parseInt(_MemoryAccessor.read(this.base, location).toString(), 16);
             this.PC += 2;
         };
         // EC
         Cpu.prototype.compareXtoMemory = function () {
             this.PC++;
             var location = this.getAddress();
-            if (parseInt(_MemoryAccessor.read(location).toString(), 16) === this.Xreg) {
+            if (parseInt(_MemoryAccessor.read(this.base, location).toString(), 16) === this.Xreg) {
                 this.Zflag = 1;
             }
             else {
@@ -189,9 +190,10 @@ var TSOS;
         Cpu.prototype.branch = function () {
             this.PC++;
             if (this.Zflag === 0) {
-                this.PC += parseInt(_MemoryAccessor.read(this.PC).toString(), 16);
+                this.PC += parseInt(_MemoryAccessor.read(this.base, this.PC).toString(), 16);
                 this.PC++;
-                this.PC %= 256;
+                if (this.PC > 256)
+                    this.PC %= 256;
             }
             else {
                 this.PC++;
@@ -201,10 +203,10 @@ var TSOS;
         Cpu.prototype.increment = function () {
             this.PC++;
             var location = this.getAddress();
-            _MemoryAccessor.writeByte(location, parseInt(_MemoryAccessor.read(location).toString(), 16) + 1);
+            _MemoryAccessor.writeByte(this.base, location, parseInt(_MemoryAccessor.read(this.base, location).toString(), 16) + 1);
             this.PC += 2;
         };
-        // FF
+        // FF 
         Cpu.prototype.systemCall = function () {
             // if the x register = 1 print y register integer
             var params = [];
@@ -215,7 +217,7 @@ var TSOS;
             if (this.Xreg === 2) {
                 var result = "";
                 for (var i = 0; i + this.Yreg < _Memory.locations.length; i++) {
-                    var location = _Memory.locations[this.Yreg + i];
+                    var location = _Memory.locations[this.base + this.Yreg + i];
                     if (location == "00") {
                         break;
                     }
@@ -237,7 +239,7 @@ var TSOS;
             this.isExecuting = false;
         };
         Cpu.prototype.getAddress = function () {
-            return parseInt(_MemoryAccessor.read(this.PC + 1).toString() + _MemoryAccessor.read(this.PC).toString(), 16);
+            return parseInt(_MemoryAccessor.read(this.base, this.PC + 1).toString() + _MemoryAccessor.read(this.base, this.PC).toString(), 16);
         };
         return Cpu;
     }());

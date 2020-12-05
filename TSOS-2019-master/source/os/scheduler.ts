@@ -18,6 +18,8 @@ module TSOS {
           _CPU.limit = process.limit;
           _CPU.isExecuting = true;
 
+          console.log(_CPU.base);
+
         }
       }
 
@@ -32,8 +34,6 @@ module TSOS {
           }
           if (id === -1 ){
             console.log("start executing")
-          }else{
-            console.log("contextSwitch")
           }
           this.loadToCPU(curProcess);
         }
@@ -59,9 +59,10 @@ module TSOS {
       }
 
       public roundRobin(){
+        console.log(this.rrCounter);
         this.rrCounter++; 
         var curProcess = -1;
-        if (_Quantum < this.rrCounter){
+        if (_Quantum < this.rrCounter + 1 ){
           this.rrCounter = 0;
           if (!this.readyQueue.isEmpty()){
             if (this.readyQueue.getSize() > 1){
@@ -69,9 +70,10 @@ module TSOS {
               this.loadToScheduler(curProcess);
             }
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SWITCH_IRQ, [curProcess]));
-            console.log("context switch")
+            
           }
         }
+        
       }
 
       public getProcess(pid){
@@ -89,6 +91,7 @@ module TSOS {
         var process = this.getProcess(pid);
         process.state = "Terminated";
         this.readyQueue.dequeue();
+        _CPU.isExecuting = false;
 
       }
 
