@@ -275,7 +275,6 @@ var TSOS;
                 priority = parseInt(args[0]);
             if (regex.test(program) && !isNaN(priority)) { // load program
                 // Load the program to memory
-                console.log(priority);
                 _MemoryManager.loadToMemory(codeList, priority);
             }
             else {
@@ -359,8 +358,15 @@ var TSOS;
         Shell.prototype.shellFormat = function () {
         };
         Shell.prototype.shellSetSchedule = function (args) {
+            if (args[0]) {
+                _Scheduler.setSchedule(args[0]);
+            }
+            else {
+                _StdOut.putText("Error: please input a scheduling algorithm [rr, fcfs, priority].");
+            }
         };
         Shell.prototype.shellGetSchedule = function () {
+            _StdOut.putText("Current scheduling algorithm: " + _Scheduler.currentSchedule);
         };
         Shell.prototype.shellLs = function (args) {
         };

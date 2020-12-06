@@ -1,10 +1,12 @@
 var TSOS;
 (function (TSOS) {
     var Scheduler = /** @class */ (function () {
-        function Scheduler(readyQueue, rrCounter) {
+        function Scheduler(readyQueue, currentSchedule, rrCounter) {
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
+            if (currentSchedule === void 0) { currentSchedule = "rr"; }
             if (rrCounter === void 0) { rrCounter = 0; }
             this.readyQueue = readyQueue;
+            this.currentSchedule = currentSchedule;
             this.rrCounter = rrCounter;
         }
         Scheduler.prototype.loadToCPU = function (process) {
@@ -84,6 +86,22 @@ var TSOS;
             }
             // else 
             return null;
+        };
+        Scheduler.prototype.setSchedule = function (algorithm) {
+            switch (algorithm) {
+                case "rr":
+                    this.currentSchedule = "rr";
+                    break;
+                case "fcfs":
+                    this.currentSchedule = "fcfs";
+                    break;
+                case "priority":
+                    this.currentSchedule = "priority";
+                    break;
+                default:
+                    _StdOut.putText("Not valid scheduling algorithm. please specify either [rr, fcfs, priority].");
+                    break;
+            }
         };
         Scheduler.prototype.terminate = function (pid) {
             var process = this.getProcess(pid);

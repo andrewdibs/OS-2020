@@ -490,11 +490,16 @@ module TSOS {
         }
 
         public shellSetSchedule(args: string[]){
-            
+            if (args[0]){
+                _Scheduler.setSchedule(args[0]);
+            }
+            else{
+                _StdOut.putText("Error: please input a scheduling algorithm [rr, fcfs, priority].");
+            }
         }
 
         public shellGetSchedule(){
-            
+            _StdOut.putText("Current scheduling algorithm: " + _Scheduler.currentSchedule);
         }
 
         public shellLs(args: string[]){

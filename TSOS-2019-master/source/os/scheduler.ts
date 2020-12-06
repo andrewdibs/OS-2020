@@ -1,6 +1,7 @@
 module TSOS {
   export class Scheduler{
       constructor(public readyQueue = new TSOS.Queue(),
+                  public currentSchedule = "rr",
                   public rrCounter = 0) {
       }
       
@@ -92,6 +93,23 @@ module TSOS {
         }
         // else 
         return null;
+      }
+
+      public setSchedule(algorithm){
+        switch (algorithm){
+          case "rr":
+            this.currentSchedule = "rr";
+            break;
+          case "fcfs":
+            this.currentSchedule = "fcfs";
+            break;
+          case "priority":
+            this.currentSchedule = "priority";
+            break;
+          default:
+            _StdOut.putText("Not valid scheduling algorithm. please specify either [rr, fcfs, priority].")
+            break;
+        }
       }
 
       public terminate(pid){
