@@ -9,7 +9,7 @@ module TSOS{
       }
       
 
-      public loadToMemory(program): void{
+      public loadToMemory(program, priority): void{
 
         // find open segment
         for (var i = 0; i < this.segmentStatus.length;i++){
@@ -30,6 +30,7 @@ module TSOS{
             currentProcess.base = base;
             currentProcess.limit = limit;
             currentProcess.state = "Resident";
+            currentProcess.priority = priority;
             _ResidentList.push(currentProcess);
             
 

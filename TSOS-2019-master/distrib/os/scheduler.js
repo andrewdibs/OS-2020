@@ -19,16 +19,16 @@ var TSOS;
                 _CPU.base = process.base;
                 _CPU.limit = process.limit;
                 _CPU.isExecuting = true;
-                console.log(_CPU.base);
             }
         };
         Scheduler.prototype.contextSwitch = function (id) {
             var nextID = this.readyQueue.peek();
             var curProcess = this.getProcess(nextID);
-            if (curProcess.state == "Terminated") {
-                this.readyQueue.dequeue();
-                return;
-            }
+            if (curProcess)
+                if (curProcess.state == "Terminated") {
+                    this.readyQueue.dequeue();
+                    return;
+                }
             if (curProcess !== null) {
                 if (curProcess.state === "Ready") {
                     this.rrCounter = 0;

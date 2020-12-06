@@ -56,6 +56,7 @@ var _Step = false;
 // Software (OS)
 var _MemoryManager = null;
 var _Scheduler = null;
+var _DeviceDriverFileSystem = null;
 var _Quantum = 6;
 // UI
 var _Console;

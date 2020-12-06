@@ -378,14 +378,14 @@ module TSOS {
             program = program.toUpperCase().replace(/\s/g,"");
             // validate only hex Symbols
             let regex = /^[0-9A-Fa-f]+$/;
-            // set default priority to 0
-            let priority = 0;
+            // set default priority to 16/32
+            let priority = 16;
             // if priority given and is a number update priority
             if (args[0])
                 priority = parseInt(args[0]);
             if (regex.test(program) && !isNaN(priority)){ // load program
-                // Load the program to memory 
-                _MemoryManager.loadToMemory(codeList)
+                // Load the program to memory
+                _MemoryManager.loadToMemory(codeList, priority)
 
             }else{
                 _StdOut.putText("Invalid hex Program or priority id number..");

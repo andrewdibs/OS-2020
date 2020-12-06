@@ -25,6 +25,7 @@ var TSOS;
             _Console.init();
             _MemoryManager = new TSOS.MemoryManager();
             _Scheduler = new TSOS.Scheduler();
+            _DeviceDriverFileSystem = new TSOS.DeviceDriverFileSystem();
             _MemoryAccessor = new TSOS.MemoryAccessor();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;

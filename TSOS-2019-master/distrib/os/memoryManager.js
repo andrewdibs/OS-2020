@@ -4,7 +4,7 @@ var TSOS;
         function MemoryManager() {
             this.segmentStatus = [true, true, true];
         }
-        MemoryManager.prototype.loadToMemory = function (program) {
+        MemoryManager.prototype.loadToMemory = function (program, priority) {
             // find open segment
             for (var i = 0; i < this.segmentStatus.length; i++) {
                 if (this.segmentStatus[i]) {
@@ -22,6 +22,7 @@ var TSOS;
                     currentProcess.base = base;
                     currentProcess.limit = limit;
                     currentProcess.state = "Resident";
+                    currentProcess.priority = priority;
                     _ResidentList.push(currentProcess);
                     _StdOut.putText("Program loaded successfully. PID: " + _CurrentPID);
                     _CurrentPID++;

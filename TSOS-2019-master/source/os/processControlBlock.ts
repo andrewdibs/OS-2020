@@ -9,6 +9,7 @@ module TSOS{
                   public limit = 0,
                   public Zflag = 0,
                   public Acc = 0,
+                  public priority = 0,
                   public IR = "",
                   public state = "Ready"){
  
@@ -22,6 +23,7 @@ module TSOS{
         this.limit = 0;
         this.Zflag = 0;
         this.Acc = 0;
+        this.priority = 0;
         this.IR = "";
         this.state = "Ready";
       }

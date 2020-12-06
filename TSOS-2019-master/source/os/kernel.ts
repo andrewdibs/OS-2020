@@ -26,6 +26,7 @@ module TSOS {
             _Console.init();
             _MemoryManager = new MemoryManager();
             _Scheduler = new Scheduler();
+            _DeviceDriverFileSystem = new DeviceDriverFileSystem();
             _MemoryAccessor = new MemoryAccessor();
 
             // Initialize standard input and output to the _Console.
