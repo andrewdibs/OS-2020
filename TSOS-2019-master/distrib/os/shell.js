@@ -348,6 +348,18 @@ var TSOS;
             }
         };
         Shell.prototype.shellCreate = function (args) {
+            if (args[0]) {
+                try {
+                    _DeviceDriverFileSystem.create(args[0]);
+                    _StdOut.putText("Created directory file on disk sucessfully.");
+                }
+                catch (error) {
+                    _StdOut.putText("Could not create file.");
+                }
+            }
+            else {
+                _StdOut.putText("Please Provide a file name.");
+            }
         };
         Shell.prototype.shellRead = function (args) {
         };
@@ -361,6 +373,7 @@ var TSOS;
             }
             else {
                 _DeviceDriverFileSystem.format();
+                _StdOut.putText("Disk Formatted succesfully.");
             }
         };
         Shell.prototype.shellSetSchedule = function (args) {
