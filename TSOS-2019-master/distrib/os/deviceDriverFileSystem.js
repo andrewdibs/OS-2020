@@ -15,8 +15,11 @@ var TSOS;
 (function (TSOS) {
     var DeviceDriverFileSystem = /** @class */ (function (_super) {
         __extends(DeviceDriverFileSystem, _super);
-        function DeviceDriverFileSystem() {
-            return _super.call(this) || this;
+        function DeviceDriverFileSystem(formatted) {
+            if (formatted === void 0) { formatted = false; }
+            var _this = _super.call(this) || this;
+            _this.formatted = formatted;
+            return _this;
         }
         DeviceDriverFileSystem.prototype.create = function (filename) {
         };
@@ -27,6 +30,24 @@ var TSOS;
         DeviceDriverFileSystem.prototype["delete"] = function (filename) {
         };
         DeviceDriverFileSystem.prototype.format = function () {
+            console.log("hit");
+            var block = new Array(60);
+            // pad start for disk
+            for (var i = 0; i < block.length; i++) {
+                i < 4 ? block[i] = "0" : block[i] = "00";
+            }
+            // join into a single string to assign tsb
+            var data = block.join();
+            // finally format disk 
+            for (var t = 0; t < TRACKS; t++) {
+                for (var s = 0; s < SECTORS; s++) {
+                    for (var b = 0; b < BLOCKS; b++) {
+                        sessionStorage.setItem(t + ":" + s + ":" + b, data);
+                    }
+                }
+            }
+            // update the display 
+            TSOS.Utils.updateDisk();
         };
         return DeviceDriverFileSystem;
     }(TSOS.DeviceDriver));

@@ -356,6 +356,12 @@ var TSOS;
         Shell.prototype.shellDelete = function (args) {
         };
         Shell.prototype.shellFormat = function () {
+            if (_CPU.isExecuting) {
+                _StdOut.putText("Unable to format disk while CPU is executing please wait..");
+            }
+            else {
+                _DeviceDriverFileSystem.format();
+            }
         };
         Shell.prototype.shellSetSchedule = function (args) {
             if (args[0]) {

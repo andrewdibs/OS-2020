@@ -50,6 +50,8 @@ module TSOS {
                this.updatePCBgui();
             this.updateMemoryTable();
             document.getElementById("status").innerHTML = _Status;
+            if (_DeviceDriverFileSystem.formatted)
+                this.updateDisk();
         }
         public static updateCPUgui(){
             document.getElementById("PC").innerHTML = _CPU.PC.toString(16).toUpperCase();
@@ -109,6 +111,38 @@ module TSOS {
                 if(_Memory.locations[i] != null)
                     document.getElementById("loc" + i).innerHTML = _Memory.locations[i];
             }
+        }
+
+        public static updateDisk(){
+            var disk = document.getElementById("disktable");
+            let body = document.createElement('tbody');
+            disk.innerHTML = "";
+            
+            var rowIndex = 0;
+            for (let t = 0; t < TRACKS; t++){
+                for (let s = 0; s < SECTORS; s++){
+                  for (let b = 0; b < BLOCKS; b++){
+                    var tsb = t + ":" + s + ":" + b;
+                    var data = sessionStorage.getItem(tsb).split(",");
+                    
+                    var row = body.insertRow(rowIndex++);
+                    var location = row.insertCell(0);
+                    location.innerHTML = tsb;
+                    var inUse = row.insertCell(1);
+                    inUse.innerHTML = data[0].valueOf();
+                    var next = row.insertCell(2);
+                    next.innerHTML = data[1] + ":" + data[2] + ":" + data[3];
+                    var content = row.insertCell(3);
+                    var zeros = "";
+                    for (var i = 4; i < data.length;i++){
+                        zeros += data[i].valueOf();
+                    }
+                    content.innerHTML = zeros;
+                  }
+                }
+            }
+
+            disk.appendChild(body);
         }
     }
 }

@@ -24,6 +24,9 @@ const EXECUTED_IRQ: number = 3;
 const EXECUTE_IRQ: number = 4;
 const SWITCH_IRQ: number = 5;
 const TERMINATE_IRQ: number = 6;
+const TRACKS: number = 4;
+const SECTORS: number = 8;
+const BLOCKS: number = 8;
 
 
 //

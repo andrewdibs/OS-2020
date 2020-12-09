@@ -131,8 +131,8 @@ module TSOS {
 
             // killall- kills all running processes.
             sc = new ShellCommand(this.shellKillAll,
-                "killall",
-                "- Kills all running processes.");
+                                    "killall",
+                                    "- Kills all running processes.");
             this.commandList[this.commandList.length] = sc;
 
             // kill <id> - kills the specified process id.
@@ -486,7 +486,12 @@ module TSOS {
         }
 
         public shellFormat(){
-            
+            if(_CPU.isExecuting){
+                _StdOut.putText("Unable to format disk while CPU is executing please wait..")
+
+            }else{
+                _DeviceDriverFileSystem.format();
+            }
         }
 
         public shellSetSchedule(args: string[]){

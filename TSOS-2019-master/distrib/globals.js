@@ -21,6 +21,9 @@ var EXECUTED_IRQ = 3;
 var EXECUTE_IRQ = 4;
 var SWITCH_IRQ = 5;
 var TERMINATE_IRQ = 6;
+var TRACKS = 4;
+var SECTORS = 8;
+var BLOCKS = 8;
 //
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
