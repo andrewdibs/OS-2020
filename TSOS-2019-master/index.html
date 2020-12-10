@@ -45,6 +45,10 @@
 
 <div id="divMain" style="width:100%;">
 
+   <div id=statusbar style="width: 500px;">
+      <h1>Status: <div id="status"></div></h1>
+   </div>
+
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
              id = "btnStartOS"
@@ -88,9 +92,7 @@
              tabindex="4"
              onclick="TSOS.Control.nextStep_click(this);">
 
-      <div id=statusbar>
-         <h1>Status: <div id="status"></div></h1>
-      </div>
+      
 
    </div>
    <div id="leftColumn" class="column">
