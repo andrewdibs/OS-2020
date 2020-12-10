@@ -493,7 +493,12 @@ module TSOS {
         }
 
         public shellDelete(args: string[]){
-            
+            if(args[0]){
+                _DeviceDriverFileSystem.delete(args[0]);
+            }
+            else{
+                _StdOut.putText("Please enter a filename to delete.");
+            }
         }
 
         public shellFormat(){

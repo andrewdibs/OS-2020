@@ -27,10 +27,7 @@ var TSOS;
             // if there is an open directory insert filename
             if (tsb) {
                 // convert filename to hex
-                var hex = "";
-                for (var i = 0; i < filename.length; i++) {
-                    hex += filename.charCodeAt(i).toString(16).toUpperCase().padStart(2, "0");
-                }
+                var hex = this.fileNameToHex(filename);
                 console.log(hex);
                 var key = tsb.replace(new RegExp(":", "g"), "");
                 var data = "1" + key + hex;
@@ -48,6 +45,24 @@ var TSOS;
         DeviceDriverFileSystem.prototype.write = function (filename, data) {
         };
         DeviceDriverFileSystem.prototype["delete"] = function (filename) {
+            var hex = this.fileNameToHex(filename);
+            for (var s = 0; s < SECTORS; s++) {
+                for (var b = 0; b < BLOCKS; b++) {
+                    if (s != 0 || b != 0) {
+                        var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+                        var data = this.getFileData(tsb);
+                        console.log(data);
+                        data.split(",");
+                        console.log(data);
+                        if (tsb[0] == "1") {
+                            if (hex == data) {
+                                sessionStorage.setItem("0:" + s + ":" + b, "");
+                            }
+                        }
+                    }
+                }
+            }
+            TSOS.Utils.updateDisk();
         };
         DeviceDriverFileSystem.prototype.ls = function () {
         };
@@ -104,6 +119,21 @@ var TSOS;
                 }
             }
             return tsb;
+        };
+        DeviceDriverFileSystem.prototype.fileNameToHex = function (filename) {
+            var hex = "";
+            for (var i = 0; i < filename.length; i++) {
+                hex += filename.charCodeAt(i).toString(16).toUpperCase().padStart(2, "0");
+            }
+            return hex;
+        };
+        DeviceDriverFileSystem.prototype.getFileData = function (tsb) {
+            var data = "";
+            for (var i = 4; i < tsb.length; i++) {
+                if (tsb[i] != "00")
+                    data += tsb[i];
+            }
+            return data;
         };
         return DeviceDriverFileSystem;
     }(TSOS.DeviceDriver));

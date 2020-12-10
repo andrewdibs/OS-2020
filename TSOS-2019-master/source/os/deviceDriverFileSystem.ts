@@ -12,10 +12,7 @@ module TSOS{
       // if there is an open directory insert filename
       if (tsb){
         // convert filename to hex
-        var hex = "";
-        for (var i = 0; i < filename.length; i++){
-          hex += filename.charCodeAt(i).toString(16).toUpperCase().padStart(2,"0");
-        }
+        var hex = this.fileNameToHex(filename);
         console.log(hex);
         var key = tsb.replace(new RegExp(":","g"),"");
         var data = "1" + key + hex;
@@ -40,6 +37,27 @@ module TSOS{
     }
 
     public delete(filename){
+      var hex = this.fileNameToHex(filename);
+
+      for (var s = 0; s < SECTORS; s++){
+        for (var b = 0; b < BLOCKS; b++){
+          if(s != 0 || b != 0){
+            var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+            var data = this.getFileData(tsb);
+            console.log(data);
+            data.split(",");
+            console.log(data);
+            if (tsb[0] == "1"){
+              if (hex == data){
+                
+                sessionStorage.setItem("0:" + s + ":" + b,"")
+              }
+            }
+            
+          }
+        }
+      }
+      Utils.updateDisk();
 
     }
 
@@ -105,6 +123,24 @@ module TSOS{
       }
       
      return tsb;
+    }
+
+    public fileNameToHex(filename){
+      var hex = "";
+      for (var i = 0; i < filename.length; i++){
+        hex += filename.charCodeAt(i).toString(16).toUpperCase().padStart(2,"0");
+      }
+      return hex;
+    }
+
+    public getFileData(tsb){
+      var data = "";
+      for (var i = 4; i < tsb.length; i++){
+        if (tsb[i] != "00")
+          data += tsb[i];
+      }
+
+      return data;
     }
 
 

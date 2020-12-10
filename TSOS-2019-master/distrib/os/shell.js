@@ -366,6 +366,12 @@ var TSOS;
         Shell.prototype.shellWrite = function (args) {
         };
         Shell.prototype.shellDelete = function (args) {
+            if (args[0]) {
+                _DeviceDriverFileSystem["delete"](args[0]);
+            }
+            else {
+                _StdOut.putText("Please enter a filename to delete.");
+            }
         };
         Shell.prototype.shellFormat = function () {
             if (_CPU.isExecuting) {
