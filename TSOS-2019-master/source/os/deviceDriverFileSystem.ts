@@ -13,7 +13,6 @@ module TSOS{
       if (tsb){
         // convert filename to hex
         var hex = this.asciiToHex(filename);
-        console.log(hex);
         var key = tsb.replace(new RegExp(":","g"),"");
         var data = "1" + key + hex;
         var array = this.formatTSB(data);
@@ -58,27 +57,33 @@ module TSOS{
                 while (content.length > 0){
                   // set the pointer from the previous location to the next location
                   var pointer = this.getOpenFileBlock();
+                  console.log(pointer);
                   this.setPointer(key,tsb, pointer);
 
                   var nextTsb = sessionStorage.getItem(pointer);
                   var next = this.formatTSB(nextTsb);
-
+                  var thisBlock = content;
+                  console.log(content);
                   // write content to open block 
                   if (content.length > 120){
-                    var thisBlock = content.substring(0,120);
-                    var index = 0;
-                    for (var i = 4; i < next.length; i++){
-                      next[i] = thisBlock.charAt(index) + thisBlock.charAt(index + 1);
-                      index += 2;
-                    }
-                    console.log(next);
-
+                    thisBlock = content.substring(0,120);
+                    content = content.substring(120);
+                    console.log(content);
                   }else{
-                    
+                    content = "";
                   }
+                  var index = 0;
+                  next[0] = "1";
+                  for (var i = 4; i < next.length; i++){
+                    next[i] = thisBlock.charAt(index) + thisBlock.charAt(index + 1);
+                    index += 2;
+                  }
+                  sessionStorage.setItem(pointer,next.join());
+                  tsb = sessionStorage.getItem(pointer);
+                  key = pointer;
 
                   Utils.updateDisk();
-                  break;
+                 
                 }
                 
 
@@ -140,7 +145,6 @@ module TSOS{
       }
       // join into a single string to assign tsb
       var data = block.join();
-      console.log(data);
       // finally format disk 
       for (let t = 0; t < TRACKS; t++){
         for (let s = 0; s < SECTORS; s++){
