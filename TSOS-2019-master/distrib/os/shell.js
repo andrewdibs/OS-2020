@@ -312,12 +312,7 @@ var TSOS;
             _MemoryManager.clearMemory();
         };
         Shell.prototype.shellRunAll = function (args) {
-            for (var i = 0; i < _ResidentList.length; i++) {
-                if (_ResidentList[i].state == "Resident") {
-                    _CPU.isExecuting = true;
-                    _Scheduler.loadToScheduler(_ResidentList[i].pid);
-                }
-            }
+            _Scheduler.runAll();
         };
         Shell.prototype.shellPs = function (args) {
             for (var i = 0; i < _ResidentList.length; i++) {

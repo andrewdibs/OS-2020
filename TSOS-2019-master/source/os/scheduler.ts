@@ -45,12 +45,14 @@ module TSOS {
 
       public loadToScheduler(process): void{
         // load process id to ready queue
+        console.log(process);
         this.readyQueue.enqueue(process);
         
       }
 
       public makeDecision(){
         if (_CPU.isExecuting){
+          // round robin and fcfs
           if (this.currentSchedule == "rr" || this.currentSchedule == "fcfs"){
             if (this.currentSchedule == "fcfs"){
               _Quantum = Number.MAX_VALUE;
@@ -58,6 +60,10 @@ module TSOS {
               _Quantum = _RequestedQuantum;
             }
             this.roundRobin();
+          }
+          // priority 
+          else{
+            this.priority();
           }
           
         }else{
@@ -93,12 +99,16 @@ module TSOS {
       }
 
       public priority(){
+        // sort the Resident list by priority
+        _ResidentList.sort((a,b) => 0 - (a.priorty > b.priority ? 1:-1));
+        for (var i = 0; i < _ResidentList.length; i++){
+         // console.log(_ResidentList[i].priority);
+        }
+        
 
       }
 
-      public fcfs(){
-
-      }
+      
 
       public getProcess(pid){
         // if pid is in resident list return process
@@ -126,6 +136,19 @@ module TSOS {
             _StdOut.putText("Not valid scheduling algorithm. please specify either [rr, fcfs, priority].")
             break;
         }
+      }
+
+      public runAll(){
+        if (this.currentSchedule == "priority"){
+          this.priority();
+        }
+        for (var i = 0; i < _ResidentList.length;i++){
+          if(_ResidentList[i].state == "Resident"){
+              _CPU.isExecuting = true;
+              _ResidentList[i].state = "Ready";
+              _Scheduler.loadToScheduler(_ResidentList[i].pid);
+          }          
+      }
       }
 
 
