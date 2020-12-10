@@ -64,19 +64,17 @@ var TSOS;
                                 while (content.length > 0) {
                                     // set the pointer from the previous location to the next location
                                     var pointer = this.getOpenFileBlock();
-                                    console.log(pointer);
                                     this.setPointer(key, tsb, pointer);
                                     var nextTsb = sessionStorage.getItem(pointer);
                                     var next = this.formatTSB(nextTsb);
                                     var thisBlock = content;
-                                    console.log(content);
                                     // write content to open block 
                                     if (content.length > 120) {
                                         thisBlock = content.substring(0, 120);
                                         content = content.substring(120);
-                                        console.log(content);
                                     }
                                     else {
+                                        // ends loop
                                         content = "";
                                     }
                                     var index = 0;
@@ -96,11 +94,14 @@ var TSOS;
                                     key = pointer;
                                     TSOS.Utils.updateDisk();
                                 }
+                                _StdOut.putText("Succesfully wrote to " + filename + ".");
+                                return;
                             }
                         }
                     }
                 }
             }
+            _StdOut.putText("File " + filename + " does not exist.");
         };
         DeviceDriverFileSystem.prototype["delete"] = function (filename) {
             var hex = this.asciiToHex(filename);
@@ -117,11 +118,24 @@ var TSOS;
                         // if in use compare file data
                         if (tsb[0] == "1") {
                             if (hex == data) {
+                                var pointer = this.getNextPointer(tsb);
                                 var blank = this.formatTSB(tsb);
                                 // set in use bit to zero and store tsb 
-                                blank[0] = "0";
+                                for (var i = 0; i < 4; i++) {
+                                    blank[i] = "0";
+                                }
                                 console.log(blank);
                                 sessionStorage.setItem("0:" + s + ":" + b, blank.join());
+                                while (pointer != null) {
+                                    tsb = sessionStorage.getItem(pointer);
+                                    var next = this.formatTSB(tsb);
+                                    for (var i = 0; i < 4; i++) {
+                                        next[i] = "0";
+                                    }
+                                    console.log(next);
+                                    sessionStorage.setItem(pointer, next.join());
+                                    pointer = this.getNextPointer(tsb);
+                                }
                                 _StdOut.putText("File " + filename + " deleted successfully.");
                                 TSOS.Utils.updateDisk();
                                 return;
@@ -131,6 +145,14 @@ var TSOS;
                 }
             }
             _StdOut.putText("File does not exist please enter valid file name.");
+        };
+        DeviceDriverFileSystem.prototype.getNextPointer = function (tsb) {
+            tsb = this.formatTSB(tsb);
+            var pointer = tsb[1] + ":" + tsb[2] + ":" + tsb[3];
+            if (pointer == "0:0:0") {
+                return null;
+            }
+            return pointer;
         };
         DeviceDriverFileSystem.prototype.ls = function () {
         };
