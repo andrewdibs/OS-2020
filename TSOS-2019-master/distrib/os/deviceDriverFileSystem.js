@@ -27,7 +27,7 @@ var TSOS;
             // if there is an open directory insert filename
             if (tsb) {
                 // convert filename to hex
-                var hex = this.fileNameToHex(filename);
+                var hex = this.asciiToHex(filename);
                 console.log(hex);
                 var key = tsb.replace(new RegExp(":", "g"), "");
                 var data = "1" + key + hex;
@@ -42,16 +42,60 @@ var TSOS;
         };
         DeviceDriverFileSystem.prototype.read = function (filename) {
         };
-        DeviceDriverFileSystem.prototype.write = function (filename, data) {
+        DeviceDriverFileSystem.prototype.write = function (filename, content) {
+            // convert file to ascii and remove quotes from content
+            var hex = this.asciiToHex(filename);
+            content = content.substring(1, content.length - 1);
+            // find file name to write to 
+            for (var s = 0; s < SECTORS; s++) {
+                for (var b = 0; b < BLOCKS; b++) {
+                    if (s != 0 || b != 0) {
+                        // get next available tsb
+                        var key = "0:" + s + ":" + b;
+                        var tsb = sessionStorage.getItem(key);
+                        //format data to compare hex values
+                        var data = this.getFileData(tsb);
+                        data = data.substring(0, hex.length);
+                        // if in use compare file data
+                        if (tsb[0] == "1") {
+                            if (hex == data) {
+                                // convert content to ascii
+                                content = this.asciiToHex(content);
+                                // while there is still data to write 
+                                while (content.length > 0) {
+                                    // set the pointer from the previous location to the next location
+                                    var pointer = this.getOpenFileBlock();
+                                    this.setPointer(key, tsb, pointer);
+                                    var nextTsb = sessionStorage.getItem(pointer);
+                                    var next = this.formatTSB(nextTsb);
+                                    // write content to open block 
+                                    if (content.length > 120) {
+                                        var thisBlock = content.substring(0, 120);
+                                        var index = 0;
+                                        for (var i = 4; i < next.length; i++) {
+                                            next[i] = thisBlock.charAt(index) + thisBlock.charAt(index + 1);
+                                            index += 2;
+                                        }
+                                        console.log(next);
+                                    }
+                                    TSOS.Utils.updateDisk();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         };
         DeviceDriverFileSystem.prototype["delete"] = function (filename) {
-            var hex = this.fileNameToHex(filename);
+            var hex = this.asciiToHex(filename);
             console.log("hex " + hex);
             for (var s = 0; s < SECTORS; s++) {
                 for (var b = 0; b < BLOCKS; b++) {
                     if (s != 0 || b != 0) {
                         // get next available tsb
-                        var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+                        var key = "0:" + s + ":" + b;
+                        var tsb = sessionStorage.getItem(key);
                         //format data to compare hex values
                         var data = this.getFileData(tsb);
                         data = data.substring(0, hex.length);
@@ -61,8 +105,10 @@ var TSOS;
                                 var blank = this.formatTSB(tsb);
                                 // set in use bit to zero and store tsb 
                                 blank[0] = "0";
+                                console.log(blank);
                                 sessionStorage.setItem("0:" + s + ":" + b, blank.join());
-                                _StdOut.putText("File " + filename + "deleted successfully.");
+                                _StdOut.putText("File " + filename + " deleted successfully.");
+                                TSOS.Utils.updateDisk();
                                 return;
                             }
                         }
@@ -70,7 +116,6 @@ var TSOS;
                 }
             }
             _StdOut.putText("File does not exist please enter valid file name.");
-            TSOS.Utils.updateDisk();
         };
         DeviceDriverFileSystem.prototype.ls = function () {
         };
@@ -129,7 +174,7 @@ var TSOS;
             }
             return tsb;
         };
-        DeviceDriverFileSystem.prototype.fileNameToHex = function (filename) {
+        DeviceDriverFileSystem.prototype.asciiToHex = function (filename) {
             var hex = "";
             for (var i = 0; i < filename.length; i++) {
                 hex += filename.charCodeAt(i).toString(16).toUpperCase().padStart(2, "0");
@@ -144,6 +189,31 @@ var TSOS;
             }
             data = data.replace(new RegExp(",", "g"), "");
             return data;
+        };
+        DeviceDriverFileSystem.prototype.getPointer = function (tsb) {
+            tsb = this.formatTSB(tsb);
+            return tsb[1] + ":" + tsb[2] + ":" + tsb[3];
+        };
+        DeviceDriverFileSystem.prototype.setPointer = function (key, tsb, pointer) {
+            tsb = this.formatTSB(tsb);
+            tsb[0] = "1";
+            tsb[1] = pointer.charAt(0);
+            tsb[2] = pointer.charAt(2);
+            tsb[3] = pointer.charAt(4);
+            console.log(tsb);
+            sessionStorage.setItem(key, tsb.join());
+        };
+        DeviceDriverFileSystem.prototype.getOpenFileBlock = function () {
+            for (var t = 1; t < TRACKS; t++) {
+                for (var s = 0; s < SECTORS; s++) {
+                    for (var b = 0; b < BLOCKS; b++) {
+                        var tsb = sessionStorage.getItem(t + ":" + s + ":" + b);
+                        if (tsb[0] == "0") {
+                            return (t + ":" + s + ":" + b);
+                        }
+                    }
+                }
+            }
         };
         return DeviceDriverFileSystem;
     }(TSOS.DeviceDriver));

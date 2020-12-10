@@ -359,6 +359,19 @@ var TSOS;
         Shell.prototype.shellRead = function (args) {
         };
         Shell.prototype.shellWrite = function (args) {
+            if (args[0] && args[1]) {
+                var file = args[0];
+                var content = args[1];
+                if (content.charAt(0) == '"' && content.charAt(content.length - 1) == '"') {
+                    _DeviceDriverFileSystem.write(file, content);
+                }
+                else {
+                    _StdOut.putText("Please surround data in quotes.");
+                }
+            }
+            else {
+                _StdOut.putText("Please provide a valid file name and data surrounded in quotes.");
+            }
         };
         Shell.prototype.shellDelete = function (args) {
             if (args[0]) {
