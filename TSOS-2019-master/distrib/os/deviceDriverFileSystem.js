@@ -82,9 +82,15 @@ var TSOS;
                                     var index = 0;
                                     next[0] = "1";
                                     for (var i = 4; i < next.length; i++) {
-                                        next[i] = thisBlock.charAt(index) + thisBlock.charAt(index + 1);
-                                        index += 2;
+                                        if (index < thisBlock.length - 1) {
+                                            next[i] = thisBlock.charAt(index) + thisBlock.charAt(index + 1);
+                                            index += 2;
+                                        }
+                                        else {
+                                            next[i] = "00";
+                                        }
                                     }
+                                    // set tsb and assign next pointers and keys
                                     sessionStorage.setItem(pointer, next.join());
                                     tsb = sessionStorage.getItem(pointer);
                                     key = pointer;
