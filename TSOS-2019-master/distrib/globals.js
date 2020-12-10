@@ -61,6 +61,7 @@ var _MemoryManager = null;
 var _Scheduler = null;
 var _DeviceDriverFileSystem = null;
 var _Quantum = 6;
+var _RequestedQuantum = 6;
 // UI
 var _Console;
 var _OsShell;

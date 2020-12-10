@@ -51,7 +51,15 @@ module TSOS {
 
       public makeDecision(){
         if (_CPU.isExecuting){
-          this.roundRobin();
+          if (this.currentSchedule == "rr" || this.currentSchedule == "fcfs"){
+            if (this.currentSchedule == "fcfs"){
+              _Quantum = Number.MAX_VALUE;
+            }else{
+              _Quantum = _RequestedQuantum;
+            }
+            this.roundRobin();
+          }
+          
         }else{
           if (!this.readyQueue.isEmpty()){
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(EXECUTE_IRQ, [-1]));
@@ -82,6 +90,14 @@ module TSOS {
           }
         }
         this.rrCounter++;
+      }
+
+      public priority(){
+
+      }
+
+      public fcfs(){
+
       }
 
       public getProcess(pid){

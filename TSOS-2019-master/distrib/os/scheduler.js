@@ -48,7 +48,15 @@ var TSOS;
         };
         Scheduler.prototype.makeDecision = function () {
             if (_CPU.isExecuting) {
-                this.roundRobin();
+                if (this.currentSchedule == "rr" || this.currentSchedule == "fcfs") {
+                    if (this.currentSchedule == "fcfs") {
+                        _Quantum = Number.MAX_VALUE;
+                    }
+                    else {
+                        _Quantum = _RequestedQuantum;
+                    }
+                    this.roundRobin();
+                }
             }
             else {
                 if (!this.readyQueue.isEmpty()) {
@@ -76,6 +84,10 @@ var TSOS;
                 }
             }
             this.rrCounter++;
+        };
+        Scheduler.prototype.priority = function () {
+        };
+        Scheduler.prototype.fcfs = function () {
         };
         Scheduler.prototype.getProcess = function (pid) {
             // if pid is in resident list return process

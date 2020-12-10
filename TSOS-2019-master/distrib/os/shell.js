@@ -340,8 +340,8 @@ var TSOS;
         };
         Shell.prototype.shellQuantum = function (args) {
             if (args[0] && !isNaN(parseInt(args[0]))) {
-                _Quantum = Math.round(parseInt(args[0]));
-                _StdOut.putText("Quantum set to: " + _Quantum);
+                _RequestedQuantum = Math.round(parseInt(args[0]));
+                _StdOut.putText("Quantum set to: " + _RequestedQuantum);
             }
             else {
                 _StdOut.putText("Error: please input a integer for quantum value.");
