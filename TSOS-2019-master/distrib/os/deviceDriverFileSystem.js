@@ -32,7 +32,7 @@ var TSOS;
                 var key = tsb.replace(new RegExp(":", "g"), "");
                 var data = "1" + key + hex;
                 var array = this.formatTSB(data);
-                console.log(array.toString());
+                // create tsb 
                 sessionStorage.setItem(tsb, array.join());
                 TSOS.Utils.updateDisk();
             }
@@ -46,22 +46,30 @@ var TSOS;
         };
         DeviceDriverFileSystem.prototype["delete"] = function (filename) {
             var hex = this.fileNameToHex(filename);
+            console.log("hex " + hex);
             for (var s = 0; s < SECTORS; s++) {
                 for (var b = 0; b < BLOCKS; b++) {
                     if (s != 0 || b != 0) {
+                        // get next available tsb
                         var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+                        //format data to compare hex values
                         var data = this.getFileData(tsb);
-                        console.log(data);
-                        data.split(",");
-                        console.log(data);
+                        data = data.substring(0, hex.length);
+                        // if in use compare file data
                         if (tsb[0] == "1") {
                             if (hex == data) {
-                                sessionStorage.setItem("0:" + s + ":" + b, "");
+                                var blank = this.formatTSB(tsb);
+                                // set in use bit to zero and store tsb 
+                                blank[0] = "0";
+                                sessionStorage.setItem("0:" + s + ":" + b, blank.join());
+                                _StdOut.putText("File " + filename + "deleted successfully.");
+                                return;
                             }
                         }
                     }
                 }
             }
+            _StdOut.putText("File does not exist please enter valid file name.");
             TSOS.Utils.updateDisk();
         };
         DeviceDriverFileSystem.prototype.ls = function () {
@@ -101,6 +109,7 @@ var TSOS;
             return null;
         };
         DeviceDriverFileSystem.prototype.formatTSB = function (data) {
+            data = data.replace(new RegExp(",", "g"), "");
             var tsb = new Array(64);
             var index = 0;
             for (var i = 0; i < data.length - 1; i++) {
@@ -129,10 +138,11 @@ var TSOS;
         };
         DeviceDriverFileSystem.prototype.getFileData = function (tsb) {
             var data = "";
-            for (var i = 4; i < tsb.length; i++) {
+            for (var i = 8; i < tsb.length; i++) {
                 if (tsb[i] != "00")
                     data += tsb[i];
             }
+            data = data.replace(new RegExp(",", "g"), "");
             return data;
         };
         return DeviceDriverFileSystem;
