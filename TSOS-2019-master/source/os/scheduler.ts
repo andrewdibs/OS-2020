@@ -32,11 +32,12 @@ module TSOS {
           }
         
         if (curProcess !== null){
-          if (curProcess.state === "Ready"){
+          if (curProcess.state === "Ready" && curProcess.location != "Disk"){
             this.rrCounter = 0;
             curProcess.state = "Running";
           }
-          this.loadToCPU(curProcess);
+          if (curProcess.location != "Disk")
+            this.loadToCPU(curProcess);
         }
         else{
           _CPU.isExecuting = false;
@@ -75,8 +76,6 @@ module TSOS {
       }
 
       public roundRobin(){
-        console.log(this.rrCounter);
-         
         var curProcess = -1;
         if (_Quantum < this.rrCounter){
           this.rrCounter = 0;
@@ -104,7 +103,7 @@ module TSOS {
         _Quantum = Number.MAX_VALUE;
         this.roundRobin();
         _Quantum = _RequestedQuantum;
-        
+
       }
 
       

@@ -29,8 +29,23 @@ var TSOS;
                     return;
                 }
             }
-            // else no memory segments available
-            _StdOut.putText("No memory segments available for use. Please clear memory using clearmem command.");
+            // store program to disk 
+            // Create PCB and add to PCB list 
+            var currentProcess = new TSOS.ProcessControlBlock();
+            currentProcess.pid = _CurrentPID++;
+            currentProcess.base = -0;
+            currentProcess.limit = -0;
+            currentProcess.state = "Resident";
+            currentProcess.location = "Disk";
+            currentProcess.priority = priority;
+            var data = "";
+            for (var i = 0; i < program.length; i++) {
+                data += program[i];
+            }
+            _DeviceDriverFileSystem.create(".swap" + currentProcess.pid);
+            _DeviceDriverFileSystem.write(".swap" + currentProcess.pid, data);
+            //unfortunaltly this breaks scheduling 
+            // _ResidentList.push(currentProcess);
         };
         MemoryManager.prototype.isValidPCB = function (pid) {
             for (var _i = 0, _ResidentList_1 = _ResidentList; _i < _ResidentList_1.length; _i++) {

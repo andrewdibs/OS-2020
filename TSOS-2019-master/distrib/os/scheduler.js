@@ -32,11 +32,12 @@ var TSOS;
                     return;
                 }
             if (curProcess !== null) {
-                if (curProcess.state === "Ready") {
+                if (curProcess.state === "Ready" && curProcess.location != "Disk") {
                     this.rrCounter = 0;
                     curProcess.state = "Running";
                 }
-                this.loadToCPU(curProcess);
+                if (curProcess.location != "Disk")
+                    this.loadToCPU(curProcess);
             }
             else {
                 _CPU.isExecuting = false;
@@ -72,7 +73,6 @@ var TSOS;
             TSOS.Utils.updatePCBgui();
         };
         Scheduler.prototype.roundRobin = function () {
-            console.log(this.rrCounter);
             var curProcess = -1;
             if (_Quantum < this.rrCounter) {
                 this.rrCounter = 0;
@@ -94,9 +94,9 @@ var TSOS;
         Scheduler.prototype.priority = function () {
             // sort the Resident list by priority
             _ResidentList = _ResidentList.sort(function (a, b) { return a.priority - b.priority; });
-            this.readyQueue.dequeue();
             _Quantum = Number.MAX_VALUE;
             this.roundRobin();
+            _Quantum = _RequestedQuantum;
         };
         Scheduler.prototype.getProcess = function (pid) {
             // if pid is in resident list return process

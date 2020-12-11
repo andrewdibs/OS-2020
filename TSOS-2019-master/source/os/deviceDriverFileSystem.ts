@@ -178,19 +178,14 @@ module TSOS{
                   sessionStorage.setItem(pointer, next.join());
                   pointer = this.getNextPointer(tsb);
                 }
-                Utils.updateDisk();
-                
-                
+                Utils.updateDisk(); 
                 return;
               }
             }
-            
           }
         }
       }
       _StdOut.putText("File does not exist please enter valid file name.");
-      
-
     }
 
     public getNextPointer(tsb){
@@ -223,7 +218,6 @@ module TSOS{
           }
         }
       }
-
     }
 
     public format(){
@@ -244,7 +238,6 @@ module TSOS{
       }
       // update the display 
       Utils.updateDisk();
-
     }
 
     public getOpenDirectory(){
@@ -352,5 +345,10 @@ module TSOS{
         }
       }
     }
+
+    public isFormatted(){
+      return this.formatted;
+    }
+
   }
 }

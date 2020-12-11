@@ -10,7 +10,7 @@ module TSOS{
       
 
       public loadToMemory(program, priority): void{
-
+        
         // find open segment
         for (var i = 0; i < this.segmentStatus.length;i++){
           if (this.segmentStatus[i]){
@@ -39,10 +39,27 @@ module TSOS{
             return;
           }
         }
-
-        // else no memory segments available
-        _StdOut.putText("No memory segments available for use. Please clear memory using clearmem command.");
+        // store program to disk 
         
+          // Create PCB and add to PCB list 
+          var currentProcess = new ProcessControlBlock();
+          currentProcess.pid = _CurrentPID++;
+          currentProcess.base = -0;
+          currentProcess.limit = -0;
+          currentProcess.state = "Resident";
+          currentProcess.location = "Disk";
+          currentProcess.priority = priority;
+
+          var data = "";
+          for (var i = 0; i < program.length; i++){
+            data += program[i];
+          }
+          _DeviceDriverFileSystem.create(".swap" + currentProcess.pid);
+          _DeviceDriverFileSystem.write(".swap" + currentProcess.pid, data);
+         //unfortunaltly this breaks scheduling 
+          // _ResidentList.push(currentProcess);
+        
+
       }
 
       public isValidPCB(pid): boolean{

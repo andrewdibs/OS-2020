@@ -319,6 +319,9 @@ var TSOS;
                 }
             }
         };
+        DeviceDriverFileSystem.prototype.isFormatted = function () {
+            return this.formatted;
+        };
         return DeviceDriverFileSystem;
     }(TSOS.DeviceDriver));
     TSOS.DeviceDriverFileSystem = DeviceDriverFileSystem;
