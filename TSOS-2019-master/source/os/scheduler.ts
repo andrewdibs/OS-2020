@@ -100,12 +100,11 @@ module TSOS {
 
       public priority(){
         // sort the Resident list by priority
-        _ResidentList.sort((a,b) => 0 - (a.priorty > b.priority ? 1:-1));
-        for (var i = 0; i < _ResidentList.length; i++){
-         // console.log(_ResidentList[i].priority);
-        }
+        _ResidentList = _ResidentList.sort((a,b) => a.priority - b.priority);
+        _Quantum = Number.MAX_VALUE;
+        this.roundRobin();
+        _Quantum = _RequestedQuantum;
         
-
       }
 
       

@@ -93,10 +93,10 @@ var TSOS;
         };
         Scheduler.prototype.priority = function () {
             // sort the Resident list by priority
-            _ResidentList.sort(function (a, b) { return 0 - (a.priorty > b.priority ? 1 : -1); });
-            for (var i = 0; i < _ResidentList.length; i++) {
-                // console.log(_ResidentList[i].priority);
-            }
+            _ResidentList = _ResidentList.sort(function (a, b) { return a.priority - b.priority; });
+            this.readyQueue.dequeue();
+            _Quantum = Number.MAX_VALUE;
+            this.roundRobin();
         };
         Scheduler.prototype.getProcess = function (pid) {
             // if pid is in resident list return process

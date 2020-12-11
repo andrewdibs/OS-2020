@@ -475,8 +475,7 @@ module TSOS {
                 }
                 _DeviceDriverFileSystem.create(name);
                 _StdOut.putText("Created directory file on disk sucessfully.");
-            
-            
+
             }
             else{
                 _StdOut.putText("Please Provide a file name.");
@@ -510,6 +509,7 @@ module TSOS {
         public shellDelete(args: string[]){
             if(args[0]){
                 _DeviceDriverFileSystem.delete(args[0]);
+                _StdOut.putText("Deleted " + args[0] +". ");
             }
             else{
                 _StdOut.putText("Please enter a filename to delete.");

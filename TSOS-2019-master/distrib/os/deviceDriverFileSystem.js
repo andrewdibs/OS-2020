@@ -75,6 +75,8 @@ var TSOS;
             _StdOut.putText("Please enter a valid file name.");
         };
         DeviceDriverFileSystem.prototype.write = function (filename, content) {
+            this["delete"](filename);
+            this.create(filename);
             // convert file to ascii and remove quotes from content
             var hex = this.asciiToHex(filename);
             content = content.substring(1, content.length - 1);
@@ -169,7 +171,6 @@ var TSOS;
                                     sessionStorage.setItem(pointer, next.join());
                                     pointer = this.getNextPointer(tsb);
                                 }
-                                _StdOut.putText("File " + filename + " deleted successfully.");
                                 TSOS.Utils.updateDisk();
                                 return;
                             }
