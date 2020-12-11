@@ -188,6 +188,22 @@ var TSOS;
             return pointer;
         };
         DeviceDriverFileSystem.prototype.ls = function () {
+            for (var s = 0; s < SECTORS; s++) {
+                for (var b = 0; b < BLOCKS; b++) {
+                    if (s != 0 || b != 0) {
+                        var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+                        if (tsb[0] == "1") {
+                            var next = this.formatTSB(tsb);
+                            var filename = this.getFileBlock(next);
+                            var ascii = this.hexToAscii(filename);
+                            if (ascii.charAt(0) != '.') {
+                                _StdOut.putText(ascii);
+                                _StdOut.advanceLine();
+                            }
+                        }
+                    }
+                }
+            }
         };
         DeviceDriverFileSystem.prototype.format = function () {
             var block = new Array(64);

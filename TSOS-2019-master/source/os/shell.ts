@@ -538,7 +538,7 @@ module TSOS {
         }
 
         public shellLs(args: string[]){
-            
+            _DeviceDriverFileSystem.ls();
         }
 
         

@@ -408,6 +408,7 @@ var TSOS;
             _StdOut.putText("Current scheduling algorithm: " + _Scheduler.currentSchedule);
         };
         Shell.prototype.shellLs = function (args) {
+            _DeviceDriverFileSystem.ls();
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
