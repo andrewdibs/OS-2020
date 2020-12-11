@@ -40,6 +40,39 @@ var TSOS;
             }
         };
         DeviceDriverFileSystem.prototype.read = function (filename) {
+            var hex = this.asciiToHex(filename);
+            for (var s = 0; s < SECTORS; s++) {
+                for (var b = 0; b < BLOCKS; b++) {
+                    if (s != 0 || b != 0) {
+                        // get next available tsb
+                        var key = "0:" + s + ":" + b;
+                        var tsb = sessionStorage.getItem(key);
+                        //format data to compare hex values
+                        var data = this.getFileData(tsb);
+                        data = data.substring(0, hex.length);
+                        // if in use compare file data
+                        if (tsb[0] == "1") {
+                            // if the file names match
+                            if (hex == data) {
+                                var pointer = this.getNextPointer(tsb);
+                                var result = "";
+                                while (pointer != null && pointer != key) {
+                                    tsb = sessionStorage.getItem(pointer);
+                                    var next = this.formatTSB(tsb);
+                                    result += this.getFileBlock(next);
+                                    console.log(next);
+                                    pointer = this.getNextPointer(tsb);
+                                }
+                                // convert the string of hex to ascii 
+                                var ascii = this.hexToAscii(result);
+                                _StdOut.putText(ascii);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            _StdOut.putText("Please enter a valid file name.");
         };
         DeviceDriverFileSystem.prototype.write = function (filename, content) {
             // convert file to ascii and remove quotes from content
@@ -217,9 +250,25 @@ var TSOS;
             }
             return hex;
         };
+        DeviceDriverFileSystem.prototype.hexToAscii = function (hex) {
+            var ascii = "";
+            for (var i = 0; (i < hex.length && hex.substr(i, 2) !== '00'); i += 2)
+                ascii += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+            console.log(ascii);
+            return ascii;
+        };
         DeviceDriverFileSystem.prototype.getFileData = function (tsb) {
             var data = "";
             for (var i = 8; i < tsb.length; i++) {
+                if (tsb[i] != "00")
+                    data += tsb[i];
+            }
+            data = data.replace(new RegExp(",", "g"), "");
+            return data;
+        };
+        DeviceDriverFileSystem.prototype.getFileBlock = function (tsb) {
+            var data = "";
+            for (var i = 4; i < tsb.length; i++) {
                 if (tsb[i] != "00")
                     data += tsb[i];
             }

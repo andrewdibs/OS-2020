@@ -482,7 +482,11 @@ module TSOS {
         }
 
         public shellRead(args: string[]){
-            
+            if (args[0]){
+                _DeviceDriverFileSystem.read(args[0]);
+            }else{
+                _StdOut.putText("Please enter a file name.");
+            }
         }
 
         public shellWrite(args: string[]){

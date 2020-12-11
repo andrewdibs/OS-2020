@@ -357,6 +357,12 @@ var TSOS;
             }
         };
         Shell.prototype.shellRead = function (args) {
+            if (args[0]) {
+                _DeviceDriverFileSystem.read(args[0]);
+            }
+            else {
+                _StdOut.putText("Please enter a file name.");
+            }
         };
         Shell.prototype.shellWrite = function (args) {
             if (args[0] && args[1]) {
