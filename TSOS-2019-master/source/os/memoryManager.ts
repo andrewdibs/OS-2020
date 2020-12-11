@@ -4,10 +4,7 @@ module TSOS{
 
       public segmentStatus = [true,true,true];
 
-      constructor(){
-
-      }
-      
+      constructor(){}
 
       public loadToMemory(program, priority): void{
         
@@ -58,8 +55,6 @@ module TSOS{
           _DeviceDriverFileSystem.write(".swap" + currentProcess.pid, data);
          //unfortunaltly this breaks scheduling 
           // _ResidentList.push(currentProcess);
-        
-
       }
 
       public isValidPCB(pid): boolean{
@@ -69,7 +64,6 @@ module TSOS{
         return false;
       }
 
-      
       public clearMemory(): void{
         for (var i = 0; i < _Memory.locations.length; i++){
           _Memory.locations[i] = "00";
