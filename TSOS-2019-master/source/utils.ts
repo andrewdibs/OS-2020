@@ -66,7 +66,7 @@ module TSOS {
             this.clearReadyQ();
             let pcbTable = document.getElementById("PCBtable");
             let body = document.createElement('tbody');
-            body.innerHTML = "<tr><th>PID</th><th>PC</th><th>IR</th><th>ACC</th><th>X</th><th>Y</th><th>Z</th><th>Base</th><th>Limit</th><th>Priority</th><th>State</th> </tr>";
+            body.innerHTML = "<tr><th>PID</th><th>PC</th><th>IR</th><th>ACC</th><th>X</th><th>Y</th><th>Z</th><th>Base</th><th>Limit</th><th>Priority</th><th>State</th><th>Location</th> </tr>";
             for (var i = 0; i < _ResidentList.length; i++){
                 if(_ResidentList[i].state != "Terminated"){
                     var row = body.insertRow(-1);
@@ -81,6 +81,7 @@ module TSOS {
                     row.insertCell(-1).innerHTML = _ResidentList[i].limit;
                     row.insertCell(-1).innerHTML = _ResidentList[i].priority;
                     row.insertCell(-1).innerHTML = _ResidentList[i].state;
+                    row.insertCell(-1).innerHTML = _ResidentList[i].location;
                 }
     
             }

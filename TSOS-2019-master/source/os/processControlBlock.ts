@@ -11,7 +11,8 @@ module TSOS{
                   public Acc = 0,
                   public priority = 0,
                   public IR = "",
-                  public state = "Ready"){
+                  public state = "Ready",
+                  public location = "Memory"){
  
       }
       public init(): void{
@@ -26,6 +27,7 @@ module TSOS{
         this.priority = 0;
         this.IR = "";
         this.state = "Ready";
+        this.location = "Memory";
       }
       
   }

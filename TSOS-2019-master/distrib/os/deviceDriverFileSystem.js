@@ -192,10 +192,12 @@ var TSOS;
                 for (var b = 0; b < BLOCKS; b++) {
                     if (s != 0 || b != 0) {
                         var tsb = sessionStorage.getItem("0:" + s + ":" + b);
+                        // if in use get file name
                         if (tsb[0] == "1") {
                             var next = this.formatTSB(tsb);
                             var filename = this.getFileBlock(next);
                             var ascii = this.hexToAscii(filename);
+                            // if the first character is a period do not show seperate swap files
                             if (ascii.charAt(0) != '.') {
                                 _StdOut.putText(ascii);
                                 _StdOut.advanceLine();
